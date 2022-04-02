@@ -6,7 +6,7 @@ plugins:
   - serverless-domain-manager
   - serverless-python-requirements
   - serverless-iam-roles-per-function
-  - serverless-resource-policy
+  # - serverless-resource-policy
   - serverless-prune-plugin
 
 provider:
