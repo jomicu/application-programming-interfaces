@@ -1,3 +1,6 @@
+import os
+
+
 from common.api import handle_request_body, handle_response
 
 def handler(event, context):
@@ -10,4 +13,4 @@ def handler(event, context):
 
 
 def build_response_body(token):
-    return { "token": token }
+    return { "token": token, "env": os.environ.get("USERS_TABLE") }

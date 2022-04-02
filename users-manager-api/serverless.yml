@@ -16,10 +16,10 @@ provider:
     - ${opt:stage}-${self:service}-key
   apiGateway:
     apiGatewaySourceType: HEADER
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-      Resource:
+  # iamRoleStatements:
+  #   - Effect: Allow
+  #     Action:
+  #     Resource:
   tracing:
     apiGateway: true
     lambda: true
@@ -55,7 +55,6 @@ functions:
     handler: create_user.handler
     runtime: python3.9
     timeout: 10
-    iamRoleStatementsInherit: true
     package:
       - requirements.txt
       - ../common/exceptions/invalid_parameter.py
@@ -64,8 +63,15 @@ functions:
       - ../common/transformers/dictionary_parser.py
       - ../common/api/__init__.py
       - create_user.py
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource:
+          Ref: UsersTable
     environments:
-      table:
+      USERS_TABLE:
         Ref: UsersTable
     events:
       - http:
@@ -81,7 +87,7 @@ functions:
               - X-Amz-Security-Token
               - X-Amz-User-Agent
           private: ${self:custom.apiKeyOnlyAccess.${opt:stage}}
-          
+
 resource:
   Resources:
     UsersTable:
@@ -90,7 +96,7 @@ resource:
         TableName: "Users"
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
-          - AttributeName: key
+          - AttributeName: id
             AttributeType: S
           KeySchema:
             - AttributeName:
@@ -98,3 +104,10 @@ resource:
           TimeToLiveSpecification:
             AttributeName: expirationDate
             Enabled: true
+  Outputs:
+    CreateUserLambdaArn:
+      Description: "${self:service} lambda Arn"
+      Value:
+        "Fn:GetAtt": ["", "Arn"]
+      Export:
+        Name: "${self:service}:${opt:stage}:CreateUserLambdaArn"
