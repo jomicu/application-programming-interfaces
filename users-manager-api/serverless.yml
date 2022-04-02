@@ -98,12 +98,12 @@ resource:
         AttributeDefinitions:
           - AttributeName: Id
             AttributeType: S
-          KeySchema:
-            - AttributeName:
-              KeyType: HASH
-          TimeToLiveSpecification:
-            AttributeName: ExpiresOn
-            Enabled: true
+        KeySchema:
+          - AttributeName:
+            KeyType: HASH
+        TimeToLiveSpecification:
+          AttributeName: ExpiresOn
+          Enabled: true
   Outputs:
     CreateUserLambdaArn:
       Description: "${self:service} lambda Arn"
