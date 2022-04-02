@@ -13,4 +13,4 @@ def handler(event, context):
 
 
 def build_response_body(token):
-    return { "token": token, "env": os.environ.get("USERS_TABLE") }
+    return { "token": token, "env": os.environ.get("USERS_TABLE_NAME") }

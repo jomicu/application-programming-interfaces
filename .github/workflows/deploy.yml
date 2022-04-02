@@ -1,0 +1,43 @@
+name: Deploy API with Serverless
+
+on: 
+  workflow_dispatch:
+    inputs:
+      apiToDeploy:
+        description: "API to deploy (folder name)"   
+        required: true
+        default: "users-manager-api"
+
+jobs:
+  deploy:
+    name: Run tests & deploy with Serverless
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set environment
+        run: |
+          case ${GITHUB_REF##*/} in
+            "production") echo "ENVIRONMENT=production" >> $GITHUB_ENV ;;
+            "preprod") echo "ENVIRONMENT=preprod" >> $GITHUB_ENV ;;
+            "qa") echo "ENVIRONMENT=qa" >> $GITHUB_ENV ;;
+            *) echo "ENVIRONMENT=development" >> $GITHUB_ENV ;;
+          esac
+
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region:  ${{ secrets.AWS_REGION }}
+
+      - name: Serverless deploy
+        working-directory: ${{ github.event.inputs.apiToDeploy }}
+        uses: serverless/github-action@master
+        with:
+          args: deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
