@@ -38,8 +38,13 @@ jobs:
       - name: Install Serverless
         run: npm install -g serverless@3.10.2
 
-      - name: Setup Serverless AWS authentication
-        run: sls config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Setup Serverless
+        run: |
+          sls config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          serverless plugin install --name serverless-domain-manager
+          serverless plugin install --name serverless-python-requirements
+          serverless plugin install --name serverless-iam-roles-per-function
+          serverless plugin install --name serverless-prune-plugin
 
       - name: Serverless deploy
         working-directory: ${{ github.event.inputs.apiToDeploy }}

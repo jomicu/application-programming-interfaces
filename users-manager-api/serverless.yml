@@ -6,7 +6,7 @@ plugins:
   - serverless-domain-manager
   - serverless-python-requirements
   - serverless-iam-roles-per-function
-  - serverless-resource-policy
+  # - serverless-resource-policy
   - serverless-prune-plugin
 
 provider:
@@ -98,12 +98,12 @@ resource:
         AttributeDefinitions:
           - AttributeName: Id
             AttributeType: S
-          KeySchema:
-            - AttributeName:
-              KeyType: HASH
-          TimeToLiveSpecification:
-            AttributeName: ExpiresOn
-            Enabled: true
+        KeySchema:
+          - AttributeName:
+            KeyType: HASH
+        TimeToLiveSpecification:
+          AttributeName: ExpiresOn
+          Enabled: true
   Outputs:
     CreateUserLambdaArn:
       Description: "${self:service} lambda Arn"
