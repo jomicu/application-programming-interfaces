@@ -20,8 +20,6 @@ provider:
     - Effect: Allow
       Action:
       Resource:
-  vpc:
-    subnetIds:
   tracing:
     apiGateway: true
     lambda: true
@@ -31,22 +29,48 @@ package:
   exclude:
     - "**"
  
+custom:
+  serviceTier: "freeTier"
+  apiKeyOnlyAccess:
+    development: true
+    production: true
+  domainNames: ${file(../serverless-settings/domainNames.yml)}
+  certificateNames: ${file(../serverless-settings/certificateNames.yml)}
+  customDomain:
+    domainName:
+    basePath: "users"
+    stage: ${opt:stage}
+    createRoute53Record: true
+    certificateName: ${self:custom.certificateNames.${opt:stage}}
+    endpointType: "regional"
+  prune:
+    automatic: true
+    number: 2
+
+
 functions:
   create-user:
-    name: ${sls:stage}-lambdaName # optional, Deployed Lambda name
-    description: Description of what the lambda function does # optional, Description to publish to AWS
-    handler: handler.hello # required, handler set in AWS Lambda
-    runtime: python2.7 # optional overwrite, default is provider runtime
-    timeout: 10 # optional, in seconds, default is 6
+    name: ${self:service}-${opt:stage}-create-user
+    description: Responsible for creating new users
+    handler: create_user.handler
+    runtime: python3.9
+    timeout: 10
     iamRoleStatementsInherit: true
     package:
       - requirements.txt
+      - ../common/exceptions/invalid_parameter.py
+      - ../common/exceptions/invalid_configuration.py
+      - ../common/utilities/__init__.py
+      - ../common/transformers/dictionary_parser.py
+      - ../common/api/__init__.py
+      - create_user.py
     environments:
-      SOME: value
+      table:
+        Ref: UsersTable
     events:
       - http:
-          path: hello
-          method: get
+          path: /
+          method: post
           cors:
             origin: '*'
             headers:
@@ -56,31 +80,14 @@ functions:
               - X-Api-Key
               - X-Amz-Security-Token
               - X-Amz-User-Agent
-
-
-functions:
-  get-user:
-    handler: handler.hello
-    events:
-      - http:
-          path: hello
-          method: get
-          cors:
-            origin: '*'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-
+          private: ${self:custom.apiKeyOnlyAccess.${opt:stage}}
+          
 resource:
   Resources:
     UsersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ""
+        TableName: "Users"
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: key
@@ -89,5 +96,5 @@ resource:
             - AttributeName:
               KeyType: HASH
           TimeToLiveSpecification:
-            AttributeName: expireOn
+            AttributeName: expirationDate
             Enabled: true

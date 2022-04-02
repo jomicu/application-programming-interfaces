@@ -121,3 +121,4 @@ class DictionaryParser(object):
                     dictionary[key] = value
 
         return dictionary
+
