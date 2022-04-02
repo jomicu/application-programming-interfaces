@@ -1,0 +1,112 @@
+service: users-manager-api
+	
+frameworkVersion: "3.10.2"
+
+plugins:
+  - serverless-domain-manager
+  - serverless-python-requirements
+  - serverless-iam-roles-per-function
+  - serverless-resource-policy
+  - serverless-prune-plugin
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: eu-west-3
+  apiKeys:
+    - ${opt:stage}-${self:service}-key
+  apiGateway:
+    apiGatewaySourceType: HEADER
+  # iamRoleStatements:
+  #   - Effect: Allow
+  #     Action:
+  #     Resource:
+  tracing:
+    apiGateway: true
+    lambda: true
+
+package:
+  individually: true
+  exclude:
+    - "**"
+ 
+custom:
+  apiKeyOnlyAccess:
+    development: true
+    production: true
+  domainNames: ${file(../serverless-settings/domainNames.yml)}
+  certificateNames: ${file(../serverless-settings/certificateNames.yml)}
+  customDomain:
+    domainName:
+    basePath: "users"
+    stage: ${opt:stage}
+    createRoute53Record: true
+    certificateName: ${self:custom.certificateNames.${opt:stage}}
+    endpointType: "regional"
+  prune:
+    automatic: true
+    number: 2
+
+
+functions:
+  createUser:
+    name: ${self:service}-${opt:stage}-create-user
+    description: Responsible for creating new users
+    runtime: python3.9
+    timeout: 10
+    package:
+      - ../common/exceptions/__init__.py
+      - ../common/api/__init__.py
+      - users_table.py
+      - create_user.py
+    handler: create_user.handler
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          # - dynamodb:Query
+          # - dynamodb:Scan
+          # - dynamodb:GetItem
+          - dynamodb:PutItem
+        Resource:
+          Ref: usersTable
+    environments:
+      USERS_TABLE_NAME:
+        Ref: usersTable
+    events:
+      - http:
+          path: /
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+          private: ${self:custom.apiKeyOnlyAccess.${opt:stage}}
+
+resource:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: "Users"
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: Id
+            AttributeType: S
+          KeySchema:
+            - AttributeName:
+              KeyType: HASH
+          TimeToLiveSpecification:
+            AttributeName: ExpiresOn
+            Enabled: true
+  Outputs:
+    CreateUserLambdaArn:
+      Description: "${self:service} lambda Arn"
+      Value: !GetAtt createUser.Arn
+      Export:
+        Name: "${self:service}:${opt:stage}:CreateUserLambdaArn"
