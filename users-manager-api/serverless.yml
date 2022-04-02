@@ -1,0 +1,93 @@
+service: users-manager-api
+
+plugins:
+  - serverless-domain-manager
+  - serverless-python-requirements
+  - serverless-iam-roles-per-function
+  - serverless-resource-policy
+  - serverless-prune-plugin
+
+provider:
+  name: aws
+  stackTags: ${file(../serverless-settings/tags.yml):StackTags}
+  runtime: python3.9
+  region: eu-west-3
+  apiKeys:
+    - ${opt:stage}-${self:service}-key
+  apiGateway:
+    apiGatewaySourceType: HEADER
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+      Resource:
+  vpc:
+    subnetIds:
+  tracing:
+    apiGateway: true
+    lambda: true
+
+package:
+  individually: true
+  exclude:
+    - "**"
+ 
+functions:
+  create-user:
+    name: ${sls:stage}-lambdaName # optional, Deployed Lambda name
+    description: Description of what the lambda function does # optional, Description to publish to AWS
+    handler: handler.hello # required, handler set in AWS Lambda
+    runtime: python2.7 # optional overwrite, default is provider runtime
+    timeout: 10 # optional, in seconds, default is 6
+    iamRoleStatementsInherit: true
+    package:
+      - requirements.txt
+    environments:
+      SOME: value
+    events:
+      - http:
+          path: hello
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+
+
+functions:
+  get-user:
+    handler: handler.hello
+    events:
+      - http:
+          path: hello
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+
+resource:
+  Resources:
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ""
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: key
+            AttributeType: S
+          KeySchema:
+            - AttributeName:
+              KeyType: HASH
+          TimeToLiveSpecification:
+            AttributeName: expireOn
+            Enabled: true
