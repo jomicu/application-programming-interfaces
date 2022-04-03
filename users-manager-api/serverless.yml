@@ -13,10 +13,11 @@ provider:
   name: aws
   runtime: python3.9
   region: eu-west-3
-  apiKeys:
-    - ${opt:stage}-${self:service}-key
+  apiName: ${self:service}
   apiGateway:
-    apiGatewaySourceType: HEADER
+    apiKeys:
+      - ${opt:stage}-${self:service}-key
+    apiKeySourceType: HEADER
   # iamRoleStatements:
   #   - Effect: Allow
   #     Action:
@@ -55,10 +56,11 @@ functions:
     runtime: python3.9
     timeout: 10
     package:
-      - ../common/exceptions/__init__.py
-      - ../common/api/__init__.py
-      - users_table.py
-      - create_user.py
+      patterns:
+        - ../common/exceptions/__init__.py
+        - ../common/api/__init__.py
+        - users_table.py
+        - create_user.py
     handler: create_user.handler
     iamRoleStatementsInherit: true
     iamRoleStatements:
@@ -70,7 +72,7 @@ functions:
           - dynamodb:PutItem
         Resource:
           Ref: usersTable
-    environments:
+    environment:
       USERS_TABLE_NAME:
         Ref: usersTable
     events:
