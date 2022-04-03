@@ -106,9 +106,9 @@ resources:
         TimeToLiveSpecification:
           AttributeName: ExpiresOn
           Enabled: true
-  Outputs:
-    CreateUserLambdaArn:
-      Description: "${self:service} lambda Arn"
-      Value: !GetAtt createUser.Arn
-      Export:
-        Name: "${self:service}:${opt:stage}:CreateUserLambdaArn"
+  # Outputs:
+  #   CreateUserLambdaArn:
+  #     Description: "${self:service} lambda Arn"
+  #     Value: !GetAtt createUser.Arn
+  #     Export:
+  #       Name: "${self:service}:${opt:stage}:CreateUserLambdaArn"
