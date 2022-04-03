@@ -13,8 +13,7 @@ provider:
   name: aws
   runtime: python3.9
   region: eu-west-3
-  #stage: ${opt:stage, "development"}
-  apiName: ${self:service}
+  apiNapme: ${self:service}
   apiGateway:
     apiKeys:
       - ${opt:stage}-${self:service}-key

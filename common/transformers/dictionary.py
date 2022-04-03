@@ -1,4 +1,7 @@
-from common.exceptions import InvalidParameterType
+from typing import Callable
+
+
+from common.exceptions import InvalidParameterType, InvalidConfiguration
 from common.utilities import is_variable_an_object, is_variable_an_dictionary
 from common.enums import NamingConventions
 from common.transformers.string import (
@@ -88,7 +91,7 @@ class DictionaryTransformer(object):
 
     
     @staticmethod
-    def _update_key_names(dictionary: dict, parser: function) -> dict:
+    def _update_key_names(dictionary: dict, parser: Callable) -> dict:
         for current_key, value in dictionary.items():
             if is_variable_an_dictionary(value):
                 dictionary[current_key] = DictionaryTransformer._update_key_names(value, parser)
@@ -114,6 +117,9 @@ class DictionaryTransformer(object):
 
         if not isinstance(current, NamingConventions) or not isinstance(new, NamingConventions):
             raise InvalidParameterType()
+
+        if current == new:
+            raise InvalidConfiguration()
 
         parser = None
 
