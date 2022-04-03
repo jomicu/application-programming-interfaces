@@ -101,7 +101,7 @@ resources:
           - AttributeName: Id
             AttributeType: S
         KeySchema:
-          - AttributeName:
+          - AttributeName: Id
             KeyType: HASH
         TimeToLiveSpecification:
           AttributeName: ExpiresOn
