@@ -1,2 +1,2 @@
-development: "*.jomicu.com"
-production: "jomicu.com"
+development: "arn:aws:acm:us-east-1:243723561938:certificate/c1c49ce0-a2dc-4e53-ae0b-a0c3983a7964"
+production: "arn:aws:acm:us-east-1:243723561938:certificate/c1c49ce0-a2dc-4e53-ae0b-a0c3983a7964"

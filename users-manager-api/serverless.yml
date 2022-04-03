@@ -4,7 +4,7 @@ frameworkVersion: "3.10.2"
 
 plugins:
   - serverless-domain-manager
-  - serverless-python-requirements
+  # - serverless-python-requirements
   - serverless-iam-roles-per-function
   # - serverless-resource-policy
   - serverless-prune-plugin
@@ -40,7 +40,7 @@ custom:
   certificateNames: ${file(../serverless-settings/certificateNames.yml)}
   customDomain:
     domainName: ${self:custom.domainNames.${opt:stage}}
-    # certificateName: ${self:custom.certificateNames.${opt:stage}}
+    certificateName: ${self:custom.certificateNames.${opt:stage}}
     basePath: "users"
     stage: ${opt:stage}
     createRoute53Record: true
