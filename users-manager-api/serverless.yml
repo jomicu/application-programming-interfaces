@@ -29,8 +29,6 @@ provider:
 
 package:
   individually: true
-  exclude:
-    - "**"
  
 custom:
   apiKeyOnlyAccess:
@@ -58,7 +56,7 @@ functions:
     runtime: python3.9
     timeout: 10
     package:
-      patterns:
+      include:
         - ../common/exceptions/__init__.py
         - ../common/api/__init__.py
         - users_table.py
