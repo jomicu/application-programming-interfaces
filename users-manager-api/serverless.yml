@@ -7,7 +7,6 @@ plugins:
   - serverless-deployment-bucket # Defines name and configuration for the deployment bucket
   - serverless-python-requirements
   - serverless-iam-roles-per-function
-  # - serverless-resource-policy
   - serverless-prune-plugin # Deletes older versions
 
 provider:
@@ -25,7 +24,7 @@ provider:
   #     Action:
   #     Resource:
   deploymentBucket:
-    name: "${self:service}-bucket"
+    name: "${self:service}-${opt:stage}-bucket"
     serverSideEncryption: AES256
   tracing:
     apiGateway: true
