@@ -3,7 +3,6 @@ service: users-manager-api
 frameworkVersion: "3.10.2"
 
 plugins:
-  - serverless-certificate-creator
   - serverless-domain-manager
   - serverless-python-requirements
   - serverless-iam-roles-per-function
