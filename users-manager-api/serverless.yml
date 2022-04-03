@@ -45,7 +45,7 @@ custom:
     stage: ${opt:stage}
     createRoute53Record: true
     endpointType: "regional"
-    # autoDomain: true
+    autoDomain: true
   prune:
     automatic: true
     number: 2
