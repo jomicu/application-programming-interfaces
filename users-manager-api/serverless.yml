@@ -38,7 +38,7 @@ custom:
   domainNames: ${file(../serverless-settings/domainNames.yml)}
   certificateNames: ${file(../serverless-settings/certificateNames.yml)}
   customDomain:
-    domainName:
+    domainName: ${self:custom.domainNames.${opt:stage}}
     basePath: "users"
     stage: ${opt:stage}
     createRoute53Record: true
@@ -90,7 +90,7 @@ functions:
               - X-Amz-User-Agent
           private: ${self:custom.apiKeyOnlyAccess.${opt:stage}}
 
-resource:
+resources:
   Resources:
     usersTable:
       Type: AWS::DynamoDB::Table
