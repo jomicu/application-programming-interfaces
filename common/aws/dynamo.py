@@ -2,6 +2,10 @@ from boto3 import resource
 from boto3.dynamodb.conditions import Key, Attr
 
 
+from common.enums.naming_conventions import NamingConventions
+from common.transformers.dictionary import DictionaryTransformer
+
+
 class DynamoDB(object):
 
 
@@ -13,6 +17,7 @@ class DynamoDB(object):
 
 
     def _create_document(self, item: dict):
+        item = DictionaryTransformer.update_naming_convention(item, NamingConventions.SNAKE, NamingConventions.PASCAL)
         self._table.put_item(Item=item)
 
 

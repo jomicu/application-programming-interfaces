@@ -13,6 +13,7 @@ provider:
   name: aws
   runtime: python3.9
   region: eu-west-3
+  #stage: ${opt:stage, "development"}
   apiName: ${self:service}
   apiGateway:
     apiKeys:
@@ -39,11 +40,12 @@ custom:
   certificateNames: ${file(../serverless-settings/certificateNames.yml)}
   customDomain:
     domainName: ${self:custom.domainNames.${opt:stage}}
+    # certificateName: ${self:custom.certificateNames.${opt:stage}}
     basePath: "users"
     stage: ${opt:stage}
     createRoute53Record: true
-    certificateName: ${self:custom.certificateNames.${opt:stage}}
     endpointType: "regional"
+    autoDomain: true
   prune:
     automatic: true
     number: 2
@@ -62,7 +64,7 @@ functions:
         - users_table.py
         - create_user.py
     handler: create_user.handler
-    iamRoleStatementsInherit: true
+    #iamRoleStatementsInherit: true
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -71,7 +73,9 @@ functions:
           # - dynamodb:GetItem
           - dynamodb:PutItem
         Resource:
-          Ref: usersTable
+          Fn::GetAtt:
+            - usersTable
+            - Arn
     environment:
       USERS_TABLE_NAME:
         Ref: usersTable
@@ -101,14 +105,16 @@ resources:
           - AttributeName: Id
             AttributeType: S
         KeySchema:
-          - AttributeName:
+          - AttributeName: Id
             KeyType: HASH
         TimeToLiveSpecification:
           AttributeName: ExpiresOn
           Enabled: true
-  Outputs:
-    CreateUserLambdaArn:
-      Description: "${self:service} lambda Arn"
-      Value: !GetAtt createUser.Arn
-      Export:
-        Name: "${self:service}:${opt:stage}:CreateUserLambdaArn"
+  # Outputs:
+    # CreateUserLambdaArn:
+    #   Description: "${self:service} lambda Arn"
+    #   Value:
+    #     Fn::GetAtt: ServiceLambdaFunction.Arn
+    #   Export:
+    #     Name: MyServiceARN
+
