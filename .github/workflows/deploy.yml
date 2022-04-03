@@ -49,5 +49,7 @@ jobs:
 
       - name: Serverless deploy
         working-directory: ${{ github.event.inputs.apiToDeploy }}
-        run: sls deploy --stage ${{ env.ENVIRONMENT }}
+        run: |
+          sls create_domain --stage ${{ env.ENVIRONMENT }}
+          sls deploy --stage ${{ env.ENVIRONMENT }}
 
