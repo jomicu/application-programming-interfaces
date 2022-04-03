@@ -1,2 +1,2 @@
-development: development-api.jomicu.com
+development: api.development.jomicu.com
 production: api.jomicu.com
