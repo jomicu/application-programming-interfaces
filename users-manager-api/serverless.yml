@@ -5,8 +5,8 @@ frameworkVersion: "3.10.2"
 plugins:
   - serverless-domain-manager # Defines Route53 Domain
   - serverless-deployment-bucket # Defines name and configuration for the deployment bucket
-  - serverless-python-requirements
-  - serverless-iam-roles-per-function
+  - serverless-python-requirements # Installs Python requirements
+  - serverless-iam-roles-per-function # Allows IAM roles per function
   - serverless-prune-plugin # Deletes older versions
 
 provider:

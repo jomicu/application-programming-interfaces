@@ -127,7 +127,6 @@ class DictionaryTransformer(object):
                 parser = parse_camel_to_snake
             elif new == NamingConventions.PASCAL:
                 parser = parse_camel_to_pascal
-
         elif current == NamingConventions.PASCAL:
             if new == NamingConventions.SNAKE:
                 parser = parse_pascal_to_snake
