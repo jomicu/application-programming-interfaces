@@ -40,11 +40,12 @@ custom:
   certificateNames: ${file(../serverless-settings/certificateNames.yml)}
   customDomain:
     domainName: ${self:custom.domainNames.${opt:stage}}
+    # certificateName: ${self:custom.certificateNames.${opt:stage}}
     basePath: "users"
     stage: ${opt:stage}
     createRoute53Record: true
-    certificateName: ${self:custom.certificateNames.${opt:stage}}
     endpointType: "regional"
+    # autoDomain: true
   prune:
     automatic: true
     number: 2
