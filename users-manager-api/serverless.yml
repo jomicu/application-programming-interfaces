@@ -70,8 +70,11 @@ functions:
     timeout: 10
     package:
       include:
-        - ../common/exceptions/__init__.py
-        - ../common/api/__init__.py
+        - ../common/exceptions.py
+        - ../common/api.py
+        - ../common/enums.py
+        - ../common/transformers/**.py
+        - ../common/utilities.py
         - users_table.py
         - create_user.py
     handler: create_user.handler

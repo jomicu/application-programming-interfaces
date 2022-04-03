@@ -2,7 +2,7 @@ from boto3 import resource
 from boto3.dynamodb.conditions import Key, Attr
 
 
-from common.enums.naming_conventions import NamingConventions
+from common.enums import NamingConventions
 from common.transformers.dictionary import DictionaryTransformer
 
 

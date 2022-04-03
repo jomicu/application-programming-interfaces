@@ -1,6 +1,6 @@
 from common.exceptions import InvalidParameterType
 from common.utilities import is_variable_an_object, is_variable_an_dictionary
-from common.enums.naming_conventions import NamingConventions
+from common.enums import NamingConventions
 from common.transformers.string import (
     parse_snake_to_camel,
     parse_snake_to_pascal,
