@@ -3,11 +3,12 @@ service: users-manager-api
 frameworkVersion: "3.10.2"
 
 plugins:
-  - serverless-domain-manager
+  - serverless-domain-manager # Defines Route53 Domain
+  - serverless-deployment-bucket # Defines name and configuration for the deployment bucket
   - serverless-python-requirements
   - serverless-iam-roles-per-function
   # - serverless-resource-policy
-  - serverless-prune-plugin
+  - serverless-prune-plugin # Deletes older versions
 
 provider:
   name: aws
@@ -23,6 +24,9 @@ provider:
   #   - Effect: Allow
   #     Action:
   #     Resource:
+  deploymentBucket:
+    name: "${self:service}-bucket"
+    serverSideEncryption: AES256
   tracing:
     apiGateway: true
     lambda: true
@@ -33,6 +37,13 @@ package:
     - "**"
  
 custom:
+  deploymentBucket:
+    blockPublicAccess: true
+    tags:
+      - Key: Managed by
+        Value: Serverless
+      - Key: Environment
+        Value: ${opt:stage}
   apiKeyOnlyAccess:
     development: true
     production: true

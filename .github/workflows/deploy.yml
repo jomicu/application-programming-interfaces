@@ -43,6 +43,7 @@ jobs:
         run: |
           sls config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           serverless plugin install --name serverless-domain-manager
+          serverless plugin install --name serverless-deployment-bucket
           serverless plugin install --name serverless-python-requirements
           serverless plugin install --name serverless-iam-roles-per-function
           serverless plugin install --name serverless-prune-plugin
