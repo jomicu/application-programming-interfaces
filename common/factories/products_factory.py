@@ -10,9 +10,7 @@ class ProductsFactory(object):
 
 
     @staticmethod
-    def create_product(name: str, description: str = None, unit: str = Units.UNIT, tags: list = []):
-        if not isinstance(unit, Units):
-            raise InvalidParameterType()
+    def create_product(name: str, description: str = None, unit: str = Units.UNIT.value, tags: list = []):
 
         id = uuid4()
 
