@@ -3,7 +3,7 @@ development:
   certificate:
     certificateName: api-development.jomicu.com
     hostedZoneNames: jomicu.com.
-production: api.jomicu.com
+production:
   domainName: api.jomicu.com
   certificate:
     certificateName: api.jomicu.com

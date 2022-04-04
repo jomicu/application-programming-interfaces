@@ -23,7 +23,7 @@ provider:
   
   # APi Gateway configuration
   apiGateway:
-    shouldStartNameWithService: true
+    #shouldStartNameWithService: true
     apiKeys:
       - ${opt:stage}-${self:service}-key
     apiKeySourceType: HEADER
