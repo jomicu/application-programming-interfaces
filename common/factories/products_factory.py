@@ -12,6 +12,6 @@ class ProductsFactory(object):
     @staticmethod
     def create_product(name: str, description: str = None, unit: str = Units.UNIT.value, tags: list = []):
 
-        id = uuid4()
+        id = str(uuid4())
 
         return Product(id, name, description, unit, tags)
