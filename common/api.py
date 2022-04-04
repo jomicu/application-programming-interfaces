@@ -1,7 +1,7 @@
 import json
 
 
-from common.enums.naming_conventions import NamingConventions
+from common.enums import NamingConventions
 from common.transformers.dictionary import DictionaryTransformer
 
 

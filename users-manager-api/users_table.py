@@ -15,7 +15,7 @@ class UsersTable(DynamoDB):
     def create_user(self, user):
         transformer = ObjectToDictionary()
         item = transformer.parse(user)
-        self._create_document(item)
+        self._create_item(item)
 
 
     def get_user(self, user):

@@ -1,2 +1,3 @@
-StackTags:
-  Service: prototype
+Tags:
+  Service: application-programming-interfaces
+  Deployed by: Serverless

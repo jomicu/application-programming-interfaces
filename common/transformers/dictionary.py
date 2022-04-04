@@ -1,6 +1,9 @@
-from common.exceptions import InvalidParameterType
-from common.utilities import is_variable_an_object, is_variable_an_dictionary
-from common.enums.naming_conventions import NamingConventions
+from typing import Callable
+
+
+from common.exceptions import InvalidParameterType, InvalidConfiguration
+from common.utilities import is_variable_an_object, is_variable_an_dictionary, is_variable_a_list
+from common.enums import NamingConventions
 from common.transformers.string import (
     parse_snake_to_camel,
     parse_snake_to_pascal,
@@ -66,35 +69,51 @@ class ObjectToDictionary(object):
                 key = key.removeprefix(private_prefix)
         return key
 
-    
+
+    def _retrieve_new_value(self, value):
+        if is_variable_an_object(value) or is_variable_an_dictionary(value):
+            return self.parse(value)
+
+        if is_variable_a_list(value):
+            return self._parse_list_items(value)
+
+        if value is None:
+            if not self._ignore_nones:
+                return value
+
+        return value
+
+
+    def _parse_list_items(self, variable: list) -> list:
+        result = list()
+        for value in variable:
+            result.append(self._retrieve_new_value(value))
+        return result
+
+ 
     def parse(self, variable) -> dict:
         dictionary = dict()
         items = self._get_items(variable)
-
         for key, value in items:
             if self._is_valid_key(key):
                 key = self._format_key(key)
-                if is_variable_an_object(value) or is_variable_an_dictionary(value):
-                    dictionary[key] = self.parse(value)
-                elif value is None:
-                    if not self._ignore_nones:
-                        dictionary[key] = value
-                else:
-                    dictionary[key] = value
+                dictionary[key] = self._retrieve_new_value(value)
         return dictionary
 
 
 class DictionaryTransformer(object):
 
-    
+
     @staticmethod
-    def _update_key_names(dictionary: dict, parser: function) -> dict:
-        for current_key, value in dictionary.items():
+    def _update_key_names(dictionary: dict, parser: Callable) -> dict:
+        updated_dict = dict()
+        for key, value in dictionary.items():
+            new_key = parser(key)
             if is_variable_an_dictionary(value):
-                dictionary[current_key] = DictionaryTransformer._update_key_names(value, parser)
-            new_key = parser(current_key)
-            dictionary[new_key] = dictionary.pop(current_key)
-        return dictionary
+                updated_dict[new_key] = DictionaryTransformer._update_key_names(value, parser)
+            else:
+                updated_dict[new_key] = value
+        return updated_dict
 
 
     """
@@ -115,6 +134,9 @@ class DictionaryTransformer(object):
         if not isinstance(current, NamingConventions) or not isinstance(new, NamingConventions):
             raise InvalidParameterType()
 
+        if current == new:
+            raise InvalidConfiguration()
+
         parser = None
 
         if current == NamingConventions.SNAKE:
@@ -127,7 +149,6 @@ class DictionaryTransformer(object):
                 parser = parse_camel_to_snake
             elif new == NamingConventions.PASCAL:
                 parser = parse_camel_to_pascal
-
         elif current == NamingConventions.PASCAL:
             if new == NamingConventions.SNAKE:
                 parser = parse_pascal_to_snake

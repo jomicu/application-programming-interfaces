@@ -1,0 +1,18 @@
+development: 
+  bucketName: jomicu-application-programming-interfaces-development
+  serverSideEncryption: AES256
+  bucketConfiguration:
+    blockPublicAccess: true
+    tags:
+      - Key: Managed by
+        Value: Serverless
+
+production: 
+  bucketName: jomicu-application-programming-interfaces-production
+  serverSideEncryption: AES256
+  bucketConfiguration:
+    blockPublicAccess: true
+    tags:
+      - Key: Managed by
+        Value: Serverless
+
