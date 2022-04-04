@@ -19,7 +19,6 @@ provider:
   # Bucket that will store the zipped API
   deploymentBucket:
     name: ${self:custom.bucket.bucketName}
-    serverSideEncryption: ${self:custom.bucket.serverSideEncryption}
   
   # APi Gateway configuration
   apiGateway:
