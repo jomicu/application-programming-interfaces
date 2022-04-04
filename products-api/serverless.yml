@@ -76,9 +76,11 @@ functions:
       include:
         - ../common/exceptions.py
         - ../common/api.py
-        - ../common/enums.py
-        - ../common/transformers/**.py
         - ../common/utilities.py
+        - ../common/factories/products_factory.py
+        - ../common/enums.py
+        - ../common/models/product.py
+        - ../common/transformers/**.py
         - products_table.py
         - create_product.py
     handler: create_product.handler
