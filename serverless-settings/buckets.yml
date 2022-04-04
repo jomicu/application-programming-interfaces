@@ -1,5 +1,5 @@
 development: 
-  bucketName: jomicu-APIs
+  bucketName: jomicu-apis
   serverSideEncryption: AES256
   bucketConfiguration:
     blockPublicAccess: true
@@ -8,7 +8,7 @@ development:
         Value: Serverless
 
 production: 
-  bucketName: jomicu-APIs
+  bucketName: jomicu-apis
   serverSideEncryption: AES256
   bucketConfiguration:
     blockPublicAccess: true
