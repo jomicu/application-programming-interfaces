@@ -29,6 +29,11 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "16"
+
+      - name: Install Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
       
       - name: Install Serverless and Plugins
         working-directory: ${{ github.event.inputs.apiToDeploy }}
@@ -43,9 +48,7 @@ jobs:
 
       - name: Setup Serverless with AWS credentials
         working-directory: ${{ github.event.inputs.apiToDeploy }}
-        run: |
-          sls config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          
+        run: sls config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Serverless deploy
         working-directory: ${{ github.event.inputs.apiToDeploy }}
