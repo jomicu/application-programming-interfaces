@@ -92,12 +92,14 @@ class DictionaryTransformer(object):
     
     @staticmethod
     def _update_key_names(dictionary: dict, parser: Callable) -> dict:
-        for current_key, value in dictionary.items():
+        updated_dict = dict()
+        for key, value in dictionary.items():
+            new_key = parser(key)
             if is_variable_an_dictionary(value):
-                dictionary[current_key] = DictionaryTransformer._update_key_names(value, parser)
-            new_key = parser(current_key)
-            dictionary[new_key] = dictionary.pop(current_key)
-        return dictionary
+                updated_dict[new_key] = DictionaryTransformer._update_key_names(value, parser)
+            else:
+                updated_dict[new_key] = value
+        return updated_dict
 
 
     """
