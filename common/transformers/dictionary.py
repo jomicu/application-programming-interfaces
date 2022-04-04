@@ -52,11 +52,14 @@ class ObjectToDictionary(object):
         raise InvalidParameterType("")
 
     
-    def _is_valid_key(self, key: str) -> bool:
+    def _is_valid(self, key: str, value: any) -> bool:
         if self._ignore_private_properties and key.startswith("_"):
             return False
 
         if key in self._properties_to_ignore:
+            return False
+
+        if value is None and self._ignore_nones:
             return False
 
         return True
@@ -77,10 +80,6 @@ class ObjectToDictionary(object):
         if is_variable_a_list(value):
             return self._parse_list_items(value)
 
-        if value is None:
-            if not self._ignore_nones:
-                return value
-
         return value
 
 
@@ -95,7 +94,7 @@ class ObjectToDictionary(object):
         dictionary = dict()
         items = self._get_items(variable)
         for key, value in items:
-            if self._is_valid_key(key):
+            if self._is_valid(key, value):
                 key = self._format_key(key)
                 dictionary[key] = self._retrieve_new_value(value)
         return dictionary
