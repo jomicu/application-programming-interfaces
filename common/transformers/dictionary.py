@@ -23,6 +23,10 @@ class ObjectToDictionary(object):
         - ignore_private_properties: If set to true, any property that starts with
                                      "_" will be ignored. Default is false.
 
+        - ignore_nones: Flag that says if we should filter out any vale from being
+                        added to the dictionary, result of the mapping, in case 
+                        it's value is null (None). Default is true.
+
         - properties_to_ignore: Tuple that will contain the name of the properties that 
                                 should be not added to the dictionary result of the
                                 mapping. Default is an empty tuple.
@@ -30,9 +34,11 @@ class ObjectToDictionary(object):
     def __init__(
         self, 
         ignore_private_properties: bool = False, 
+        ignore_nones: bool = True, 
         properties_to_ignore: tuple = ()
     ) -> None:
         self._ignore_private_properties = ignore_private_properties
+        self._ignore_nones = ignore_nones
         self._properties_to_ignore = properties_to_ignore
 
 
@@ -46,14 +52,11 @@ class ObjectToDictionary(object):
         raise InvalidParameterType("")
 
     
-    def _is_valid(self, key: str, value) -> bool:
+    def _is_valid_key(self, key: str) -> bool:
         if self._ignore_private_properties and key.startswith("_"):
             return False
 
         if key in self._properties_to_ignore:
-            return False
-
-        if value is None:
             return False
 
         return True
@@ -68,19 +71,21 @@ class ObjectToDictionary(object):
 
 
     def _retrieve_new_value(self, value):
-        print(value)
         if is_variable_an_object(value) or is_variable_an_dictionary(value):
             return self.parse(value)
 
         if is_variable_a_list(value):
             return self._parse_list_items(value)
 
+        if value is None:
+            if not self._ignore_nones:
+                return value
+
         return value
 
 
     def _parse_list_items(self, variable: list) -> list:
         result = list()
-        print(variable)
         for value in variable:
             result.append(self._retrieve_new_value(value))
         return result
@@ -89,9 +94,8 @@ class ObjectToDictionary(object):
     def parse(self, variable) -> dict:
         dictionary = dict()
         items = self._get_items(variable)
-        print(variable)
         for key, value in items:
-            if self._is_valid(key, value):
+            if self._is_valid_key(key):
                 key = self._format_key(key)
                 dictionary[key] = self._retrieve_new_value(value)
         return dictionary
