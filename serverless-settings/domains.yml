@@ -1,0 +1,10 @@
+development: 
+  domainName: api-development.jomicu.com
+  certificate:
+    certificateName: api-development.jomicu.com
+    hostedZoneNames: jomicu.com.
+production: api.jomicu.com
+  domainName: api.jomicu.com
+  certificate:
+    certificateName: api.jomicu.com
+    hostedZoneNames: jomicu.com.

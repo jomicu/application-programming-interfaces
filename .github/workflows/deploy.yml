@@ -6,11 +6,11 @@ on:
       apiToDeploy:
         description: "API to deploy (folder name)"   
         required: true
-        default: "users-manager-api"
+        default: "products-api"
 
 jobs:
   deploy:
-    name: Run tests & deploy with Serverless
+    name: Deploy API with Serverless
     runs-on: ubuntu-latest
     steps:
       - name: Set environment
@@ -29,26 +29,27 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "16"
-
-      - name: Install Python 3.9
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.9"
       
-      - name: Install Serverless
-        run: npm install -g serverless@3.10.2
-
-      - name: Setup Serverless
-        working-directory: ${{ github.event.inputs.apiToDeploy }}
+      - name: Install Serverless and Plugins
         run: |
-          sls config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          serverless plugin install --name serverless-domain-manager
+          npm install -g serverless@3.10.2
           serverless plugin install --name serverless-deployment-bucket
+          serverless plugin install --name serverless-certificate-creator
+          serverless plugin install --name serverless-domain-manager
           serverless plugin install --name serverless-python-requirements
           serverless plugin install --name serverless-iam-roles-per-function
           serverless plugin install --name serverless-prune-plugin
 
+      - name: Setup Serverless with AWS credentials
+        working-directory: ${{ github.event.inputs.apiToDeploy }}
+        run: |
+          sls config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          
+
       - name: Serverless deploy
         working-directory: ${{ github.event.inputs.apiToDeploy }}
-        run: sls deploy --stage ${{ env.ENVIRONMENT }}
+        run: |
+          serverless create-cert
+          serverless create_domain
+          sls deploy --stage ${{ env.ENVIRONMENT }}
 

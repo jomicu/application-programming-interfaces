@@ -1,0 +1,7 @@
+development:
+  automatic: true
+  number: 2
+
+production:
+  automatic: true
+  number: 2
