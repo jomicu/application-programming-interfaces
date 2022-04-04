@@ -125,15 +125,11 @@ resources:
         AttributeDefinitions:
           - AttributeName: Id
             AttributeType: S
+          - AttributeName: Name
+            AttributeType: S
         KeySchema:
           - AttributeName: Id
+            KeyType: RANGE
+          - AttributeName: Name
             KeyType: HASH
-
-  # Outputs:
-    # CreateUserLambdaArn:
-    #   Description: "${self:service} lambda Arn"
-    #   Value:
-    #     Fn::GetAtt: ServiceLambdaFunction.Arn
-    #   Export:
-    #     Name: MyServiceARN
 
