@@ -1,6 +1,6 @@
 service: ProductsAPI
 	
-frameworkVersion: "3.10.2" # Lock Serverless version
+frameworkVersion: "3.11.0" # Lock Serverless version
 
 plugins:
   - serverless-deployment-bucket # Defines name and configuration for the deployment bucket
