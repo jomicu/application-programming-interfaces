@@ -13,7 +13,7 @@ plugins:
 provider:
   name: aws
   runtime: python3.9
-  stage: ${opt:stage}
+  stage: ${env:ENVIRONMENT}
   region: eu-west-3 #${opt:region, "eu-west-3"}
 
   # Bucket that will store the zipped API
