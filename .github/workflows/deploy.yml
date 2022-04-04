@@ -33,7 +33,7 @@ jobs:
       - name: Install Serverless and Plugins
         working-directory: ${{ github.event.inputs.apiToDeploy }}
         run: |
-          npm install -g serverless@3.10.2
+          npm install -g serverless@3.11.0
           serverless plugin install --name serverless-deployment-bucket
           serverless plugin install --name serverless-certificate-creator
           serverless plugin install --name serverless-domain-manager
