@@ -8,4 +8,5 @@ class NamingConventions(Enum):
 
 class Units(Enum):
     KG = "kilograms"
+    UNIT = "unit"
     

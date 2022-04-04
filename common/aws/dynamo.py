@@ -1,5 +1,9 @@
+import json
+from decimal import Decimal
+
+
 from boto3 import resource
-from boto3.dynamodb.conditions import Key, Attr
+from boto3.dynamodb.conditions import Key
 
 
 from common.enums import NamingConventions
@@ -18,6 +22,7 @@ class DynamoDB(object):
 
     def _create_item(self, item: dict):
         item = DictionaryTransformer.update_naming_convention(item, NamingConventions.SNAKE, NamingConventions.PASCAL)
+        item = json.loads(json.dumps(item), parse_float=Decimal)
         self._table.put_item(Item=item)
 
 

@@ -13,7 +13,7 @@ class ProductsTable(DynamoDB):
         super().__init__(environ.get("PRODUCTS_TABLE_NAME"), "Id", "")
 
     
-    def create_product(self, product: Product):
+    def save_product(self, product: Product):
         transformer = ObjectToDictionary()
         item = transformer.parse(product)
         self._create_item(item)
