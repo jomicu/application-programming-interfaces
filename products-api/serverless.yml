@@ -69,7 +69,7 @@ package:
 
 functions:
   createProduct:
-    name: ${opt:stage}-${self:service}-create-product
+    name: ${self:provider.stage}-${self:service}-create-product
     description: Responsible for creating new products
     runtime: python3.9
     timeout: 10
@@ -111,7 +111,7 @@ functions:
               - X-Api-Key
               - X-Amz-Security-Token
               - X-Amz-User-Agent
-          private: ${self:custom.apiKeyOnlyAccess.${opt:stage}}
+          private: ${self:custom.apiKeyOnlyAccess.${self:provider.stage}}
 
 resources:
   Resources:
