@@ -77,8 +77,9 @@ functions:
         - ../common/exceptions.py
         - ../common/api.py
         - ../common/utilities.py
-        - ../common/factories/products_factory.py
         - ../common/enums.py
+        - ../common/aws/dynamo.py
+        - ../common/factories/products_factory.py
         - ../common/models/product.py
         - ../common/transformers/**.py
         - products_table.py
