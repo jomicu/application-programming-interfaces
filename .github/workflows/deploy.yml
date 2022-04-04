@@ -31,6 +31,7 @@ jobs:
           node-version: "16"
       
       - name: Install Serverless and Plugins
+        working-directory: ${{ github.event.inputs.apiToDeploy }}
         run: |
           npm install -g serverless@3.10.2
           serverless plugin install --name serverless-deployment-bucket
