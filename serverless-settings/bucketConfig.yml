@@ -1,0 +1,4 @@
+blockPublicAccess: true
+tags:
+  - Key: Managed by
+    Value: Serverless
