@@ -4,3 +4,4 @@ class InvalidParameterType(Exception):
 
 class InvalidConfiguration(Exception):
     pass
+

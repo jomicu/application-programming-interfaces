@@ -7,7 +7,11 @@ from boto3.dynamodb.conditions import Key
 
 
 from common.enums import NamingConventions
-from common.transformers.dictionary import DictionaryTransformer
+from common.transformers.dictionary import TransformDictionary
+
+
+class ItemNotFoundException(Exception):
+    pass
 
 
 class DynamoDB(object):
@@ -20,15 +24,41 @@ class DynamoDB(object):
         self._sort_key = sort_key
 
 
+    @staticmethod
+    def _format_response(dictionary: dict):
+        return TransformDictionary.update_naming_convention(
+            dictionary, 
+            current=NamingConventions.PASCAL, 
+            new=NamingConventions.SNAKE
+        )
+
+
     def _create_item(self, item: dict):
-        item = DictionaryTransformer.update_naming_convention(item, NamingConventions.SNAKE, NamingConventions.PASCAL)
+        item = TransformDictionary.update_naming_convention(item, NamingConventions.SNAKE, NamingConventions.PASCAL)
         item = json.loads(json.dumps(item), parse_float=Decimal)
         self._table.put_item(Item=item)
 
 
     def _get_item_by_hash_key(self, hash_key: str):
         item = self._table.query(KeyConditionExpression=Key(self._hash_key).eq(hash_key))
-        return DictionaryTransformer.update_naming_convention(item, NamingConventions.PASCAL, NamingConventions.SNAKE)
+        return TransformDictionary.update_naming_convention(item, NamingConventions.PASCAL, NamingConventions.SNAKE)
+
+
+    def _get_item_by_sort_key(self, sort_key: str):
+        item = self._table.query(KeyConditionExpression=Key(self._sort_key).eq(sort_key))
+        return TransformDictionary.update_naming_convention(item, NamingConventions.PASCAL, NamingConventions.SNAKE)
+
+    
+    def _get_item_by_hash_and_sort_key(self, hash_key: str, sort_key: str):
+        response: dict = self._table.query(
+            KeyConditionExpression=Key(self._hash_key).eq(hash_key) & Key(self._sort_key).eq(sort_key)
+        )
+
+        if len(response["Items"]) == 0:
+            raise ItemNotFoundException()
+
+        item = response["Items"][0]
+        return DynamoDB._format_response(item)
 
     
     # def _update_document(self, item: dict, hash_key: str, sort_key: str):

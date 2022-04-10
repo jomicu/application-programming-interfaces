@@ -2,9 +2,9 @@ from unittest import TestCase
 
 
 from common.enums import NamingConventions
-from common.transformers.dictionary import DictionaryTransformer
+from common.transformers.dictionary import TransformDictionary
 
-class TestDictionaryTransformer(TestCase):
+class TestTransformDictionary(TestCase):
 
     def test_update_naming_conventions_from_snake_to_camel(self):
         mocked_dictionary = {
@@ -19,6 +19,6 @@ class TestDictionaryTransformer(TestCase):
             "snakeParam2": ""
         }
 
-        result = DictionaryTransformer.update_naming_convention(mocked_dictionary, NamingConventions.SNAKE, NamingConventions.CAMEL)
+        result = TransformDictionary.update_naming_convention(mocked_dictionary, NamingConventions.SNAKE, NamingConventions.CAMEL)
 
         self.assertEqual(expected_dictionary, result)
