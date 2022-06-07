@@ -151,7 +151,7 @@ class TransformDictionary(object):
     def update_naming_convention(dictionary: dict, current: str, new: str) -> dict:
 
         if not isinstance(current, NamingConventions) or not isinstance(new, NamingConventions):
-            raise InvalidParameterType()
+            raise ValueError()
 
         if current == new:
             raise InvalidConfiguration()
@@ -175,7 +175,7 @@ class TransformDictionary(object):
                 parser = parse_pascal_to_camel
 
         if parser is None:
-            raise InvalidParameterType()
+            raise ValueError()
 
         return TransformDictionary._update_key_names(dictionary, parser)
     

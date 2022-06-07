@@ -1,5 +1,6 @@
+from dataclasses import asdict
+
 from common.api import handle_request_body, handle_response
-from common.transformers.dictionary import TransformToDictionary
 from common.factories.products_factory import ProductsFactory
 from common.models.product import Product
 from products_table import ProductsTable
@@ -17,5 +18,4 @@ def handler(event, context):
 
 
 def build_response_body(product: Product):
-    parser = TransformToDictionary()
-    return parser.parse(product)
+    return asdict(product)

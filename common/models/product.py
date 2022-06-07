@@ -1,14 +1,13 @@
-from pydantic import validate_arguments
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
+from common.decorators import custom_dataclass
 
-@validate_arguments
+@custom_dataclass
 @dataclass(frozen=True)
 class Product(object):
 
     id: str
     name: str
-    description: str
     unit: str
-    tags: list = []
-
+    description: str = field(default=None)
+    tags: list[str] = field(default_factory=list)
