@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-	"title": "CreateProductModel",
+  "title": "CreateProductModel",
   "type": "object",
-	"required": ["name", "type", "unit"],
+  "required": ["name", "type", "unit"],
   "properties": {
 		"name": {
 			"type": "string",
@@ -11,11 +11,11 @@
 		},
 		"type": {
 			"type": "string",
-			"enum": ["food", "clothes"]
+			"enum": ["food", "clothes", "furniture"]
 		},
 		"unit": {
 			"type": "string",
-			"enum": ["unit", "kg"]
+			"enum": ["unit", "kilograms", "meters"]
 		},
 		"description": {
 			"type": "string",
@@ -23,7 +23,13 @@
 			"maxLength": 150
 		},
 		"tags": {
-			"type": "array"
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"uniqueItems": true,
+			"minItems": 0,
+ 			"maxItems": 5
 		}
 	}
 }

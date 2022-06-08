@@ -80,7 +80,6 @@ functions:
         - ../common/decorators.py
         - ../common/enums.py
         - ../common/aws/dynamo.py
-        - ../common/factories/products_factory.py
         - ../common/models/product.py
         - ../common/transform.py
         - products_table.py
@@ -118,7 +117,7 @@ functions:
           request:
             schemas:
               application/json:
-                schema: ${file(documents/create_product_schema.json)}
+                schema: ${file(schemas/create_product_schema.json)}
                 name: PostCreateProduct
                 description: Validation model for Creating Products
 
