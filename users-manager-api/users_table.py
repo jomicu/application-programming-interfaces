@@ -1,7 +1,7 @@
 from os import environ
 
 
-from common.transformers.dictionary import TransformToDictionary
+from common.transform import TransformToDictionary
 from common.aws.dynamo import DynamoDB
 
 

@@ -7,7 +7,7 @@ from boto3.dynamodb.conditions import Key
 
 
 from common.enums import NamingConventions
-from common.transformers.dictionary import TransformDictionary
+from common.transform import TransformDictionary
 
 
 class ItemNotFoundException(Exception):
