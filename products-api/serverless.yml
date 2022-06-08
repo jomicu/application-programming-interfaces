@@ -105,6 +105,7 @@ functions:
       - http:
           path: /create-product
           method: post
+          private: ${self:custom.apiKeyOnlyAccess.${self:provider.stage}}
           cors:
             origin: "*"
             headers:
@@ -114,7 +115,9 @@ functions:
               - X-Api-Key
               - X-Amz-Security-Token
               - X-Amz-User-Agent
-          private: ${self:custom.apiKeyOnlyAccess.${self:provider.stage}}
+          request:
+            schema:
+              application/json: ${file(create_product_schema.json)}
 
 resources:
   Resources:
