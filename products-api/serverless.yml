@@ -116,8 +116,12 @@ functions:
               - X-Amz-Security-Token
               - X-Amz-User-Agent
           request:
-            schema:
-              application/json: ${file(create_product_schema.json)}
+            schemas:
+              application/json:
+                schema: ${file(create_product_schema.json)}
+                name: PostCreateProduct
+                description: Validation model for Creating Products
+
 
 resources:
   Resources:
