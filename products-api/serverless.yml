@@ -68,7 +68,7 @@ package:
 
 functions:
   createProduct:
-    name: ${self:provider.stage}-${self:service}-create-product
+    name: ${self:provider.stage}-${self:service}-CreateProduct
     description: Responsible for creating new products
     runtime: python3.9
     timeout: 10
@@ -118,7 +118,7 @@ functions:
           request:
             schemas:
               application/json:
-                schema: ${file(create_product_schema.json)}
+                schema: ${file(documents/create_product_schema.json)}
                 name: PostCreateProduct
                 description: Validation model for Creating Products
 
