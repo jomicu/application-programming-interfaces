@@ -45,8 +45,8 @@ custom:
   apiKeyOnlyAccess:
     development: true
     production: true
-  domainNames: ${file(../serverless-settings/domainNames.yml)}
-  certificateNames: ${file(../serverless-settings/certificateNames.yml)}
+  domainNames: ${file(../serverless_settings/domainNames.yml)}
+  certificateNames: ${file(../serverless_settings/certificateNames.yml)}
   customDomain:
     domainName: ${self:custom.domainNames.${opt:stage}}
     certificateName: ${self:custom.certificateNames.${opt:stage}}

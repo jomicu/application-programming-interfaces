@@ -6,7 +6,7 @@ on:
       apiToDeploy:
         description: "API to deploy (folder name)"   
         required: true
-        default: "products-api"
+        default: "products_api"
 
 jobs:
   deploy:

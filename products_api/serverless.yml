@@ -6,7 +6,7 @@ plugins:
   - serverless-deployment-bucket # Defines name and configuration for the deployment bucket
   - serverless-certificate-creator # Creates certificate, if needed
   - serverless-domain-manager # Defines Route53 Domain
-  - serverless-python-requirements # Installs Python requirements
+  # - serverless-python-requirements # Installs Python requirements
   - serverless-iam-roles-per-function # Allows IAM roles per function
   - serverless-prune-plugin # Deletes older versions
 
@@ -33,9 +33,9 @@ provider:
  
 custom:
   # Common configuration
-  bucket: ${file(../serverless-settings/buckets.yml):${self:provider.stage}}
-  domain: ${file(../serverless-settings/domains.yml):${self:provider.stage}}
-  prune: ${file(../serverless-settings/prune.yml):${self:provider.stage}}
+  bucket: ${file(../serverless_settings/buckets.yml):${self:provider.stage}}
+  domain: ${file(../serverless_settings/domains.yml):${self:provider.stage}}
+  prune: ${file(../serverless_settings/prune.yml):${self:provider.stage}}
 
   # S3
   deploymentBucket: ${self:custom.bucket.bucketConfiguration}
