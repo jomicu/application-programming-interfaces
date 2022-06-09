@@ -1,5 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "https://api.jomicu.com/products/schemas/createproductmodel.json",
   "title": "CreateProductModel",
   "type": "object",
 	"required": ["products"],
