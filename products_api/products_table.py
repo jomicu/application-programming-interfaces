@@ -18,3 +18,9 @@ class ProductsTable(DynamoDB):
 
     def save_product(self, product: Product):
         self._create_item(asdict(product))
+
+    def save_products(self, products: list[Product]):
+        if len(products) == 1:
+            self.save_product(products[0])
+        else:
+            self._create_items([asdict(product) for product in products])

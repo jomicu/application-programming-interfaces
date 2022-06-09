@@ -38,6 +38,14 @@ class DynamoDB(object):
         item = json.loads(json.dumps(item), parse_float=Decimal)
         self._table.put_item(Item=item)
 
+    
+    def _create_items(self, items: list[dict]):
+        with self._table.batch_writer() as batch:
+            for item in items:
+                item = TransformDictionary.update_naming_convention(item, NamingConventions.SNAKE, NamingConventions.PASCAL)
+                item = json.loads(json.dumps(item), parse_float=Decimal)
+                batch.put_item(Item=item)
+
 
     def _get_item_by_hash_key(self, hash_key: str):
         item = self._table.query(KeyConditionExpression=Key(self._hash_key).eq(hash_key))

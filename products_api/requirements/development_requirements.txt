@@ -1,3 +1,3 @@
--r create_product_requirements.txt
+-r create_products_requirements.txt
 boto3==1.21.32
 moto

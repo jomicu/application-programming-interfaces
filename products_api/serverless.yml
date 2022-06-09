@@ -83,8 +83,8 @@ functions:
         - ../common/models/product.py
         - ../common/transform.py
         - products_table.py
-        - create_product.py
-    handler: create_product.handler
+        - create_products.py
+    handler: create_products.handler
     iamRoleStatementsInherit: true
     iamRoleStatements:
       - Effect: Allow
@@ -117,7 +117,7 @@ functions:
           request:
             schemas:
               application/json:
-                schema: ${file(schemas/create_product_schema.json)}
+                schema: ${file(schemas/create_products_schema.json)}
                 name: PostCreateProduct
                 description: Validation model for Creating Products
 
