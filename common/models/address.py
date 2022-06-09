@@ -1,11 +1,9 @@
+from dataclasses import dataclass, field
+
+from common.decorators import custom_dataclass
+
+@custom_dataclass
+@dataclass(frozen=True)
 class Address(object):
 
-
-    def __init__(self, postcode=None):
-        self._postcode = postcode
-
-    
-    @property
-    def postcode(self):
-        return self._postcode
-
+    postcode: str = field(default=None)

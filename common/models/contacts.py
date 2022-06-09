@@ -1,18 +1,10 @@
+from dataclasses import dataclass, field
+
+from common.decorators import custom_dataclass
+
+@custom_dataclass
+@dataclass(frozen=True)
 class Contacts(object):
 
-
-    def __init__(self, telephone=None, email=None):
-        self._telephone = telephone
-        self._email = email
-
-
-    @property
-    def telephone(self):
-        return self._telephone
-
-    
-    @property
-    def email(self):
-        return self._email
-
-        
+    telephone: str = field(default=None)
+    email: str = field(default=None)

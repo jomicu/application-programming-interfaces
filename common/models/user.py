@@ -1,42 +1,20 @@
+from dataclasses import dataclass, field
+
+from common.utilities import is_variable_an_dictionary
+from common.decorators import custom_dataclass
 from common.models.contacts import Contacts
 from common.models.address import Address
 
+@custom_dataclass
+@dataclass(frozen=True)
 class User(object):
 
-    def __init__(
-        self, 
-        first_name: str, 
-        last_name: str, 
-        age: int, 
-        contacts: dict, 
-        address: dict
-    ) -> None:
-        self._first_name = first_name
-        self._last_name = last_name
-        self._age = age
-        self._contacts = Contacts(**contacts)
-        self._address = Address(**address)
+    first_name: str
+    last_name: str
+    age: int
+    contacts: Contacts = field(default=None)
+    address: Address = field(default=None)
 
-
-    @property
-    def first_name(self):
-        return self._first_name
-
-    
-    @property
-    def last_name(self):
-        return self._last_name
-
-    
-    @property
-    def age(self):
-        return self._age
-
-    @property
-    def contacts(self):
-        return self._contacts
-
-
-    @property
-    def address(self):
-        return self._address
+    def __post_init__(self):
+        object.__setattr__(self, "contacts", Contacts(**self.contacts) if is_variable_an_dictionary(self.contacts) else self.contacts)
+        object.__setattr__(self, "address", Address(**self.address) if is_variable_an_dictionary(self.address) else self.address)

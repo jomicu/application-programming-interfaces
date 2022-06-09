@@ -2,12 +2,12 @@ import json
 
 
 from common.enums import NamingConventions
-from common.transformers.dictionary import DictionaryTransformer
+from common.transform import TransformDictionary
 
 
 def handle_request_body(body: str):
     body = json.loads(body)
-    return DictionaryTransformer.update_naming_convention(body, NamingConventions.CAMEL, NamingConventions.SNAKE)
+    return TransformDictionary.update_naming_convention(body, NamingConventions.CAMEL, NamingConventions.SNAKE)
 
 
 # TODO cors and headers
@@ -16,10 +16,9 @@ def handle_response(event: dict, status_code: int, body: dict = None):
     headers = ""
     
     response = dict()
-    response["statusCode"] = status_code
+    response["status_code"] = status_code
 
     if body is not None:
-        body = DictionaryTransformer.update_naming_convention(body, NamingConventions.SNAKE, NamingConventions.CAMEL)
         response["body"] = json.dumps(body)
 
-    return response
+    return TransformDictionary.update_naming_convention(response, NamingConventions.SNAKE, NamingConventions.CAMEL)

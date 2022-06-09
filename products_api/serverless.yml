@@ -1,12 +1,12 @@
 service: ProductsAPI
 	
-frameworkVersion: "3.11.0" # Lock Serverless version
+frameworkVersion: "3.19.0" # Lock Serverless version
 
 plugins:
   - serverless-deployment-bucket # Defines name and configuration for the deployment bucket
   - serverless-certificate-creator # Creates certificate, if needed
   - serverless-domain-manager # Defines Route53 Domain
-  - serverless-python-requirements # Installs Python requirements
+  # - serverless-python-requirements # Installs Python requirements
   - serverless-iam-roles-per-function # Allows IAM roles per function
   - serverless-prune-plugin # Deletes older versions
 
@@ -33,9 +33,9 @@ provider:
  
 custom:
   # Common configuration
-  bucket: ${file(../serverless-settings/buckets.yml):${self:provider.stage}}
-  domain: ${file(../serverless-settings/domains.yml):${self:provider.stage}}
-  prune: ${file(../serverless-settings/prune.yml):${self:provider.stage}}
+  bucket: ${file(../serverless_settings/buckets.yml):${self:provider.stage}}
+  domain: ${file(../serverless_settings/domains.yml):${self:provider.stage}}
+  prune: ${file(../serverless_settings/prune.yml):${self:provider.stage}}
 
   # S3
   deploymentBucket: ${self:custom.bucket.bucketConfiguration}
@@ -68,7 +68,7 @@ package:
 
 functions:
   createProduct:
-    name: ${self:provider.stage}-${self:service}-create-product
+    name: ${self:provider.stage}-${self:service}-CreateProduct
     description: Responsible for creating new products
     runtime: python3.9
     timeout: 10
@@ -76,9 +76,12 @@ functions:
       include:
         - ../common/exceptions.py
         - ../common/api.py
-        - ../common/enums.py
-        - ../common/transformers/**.py
         - ../common/utilities.py
+        - ../common/decorators.py
+        - ../common/enums.py
+        - ../common/aws/dynamo.py
+        - ../common/models/product.py
+        - ../common/transform.py
         - products_table.py
         - create_product.py
     handler: create_product.handler
@@ -101,6 +104,7 @@ functions:
       - http:
           path: /create-product
           method: post
+          private: ${self:custom.apiKeyOnlyAccess.${self:provider.stage}}
           cors:
             origin: "*"
             headers:
@@ -110,7 +114,13 @@ functions:
               - X-Api-Key
               - X-Amz-Security-Token
               - X-Amz-User-Agent
-          private: ${self:custom.apiKeyOnlyAccess.${self:provider.stage}}
+          request:
+            schemas:
+              application/json:
+                schema: ${file(schemas/create_product_schema.json)}
+                name: PostCreateProduct
+                description: Validation model for Creating Products
+
 
 resources:
   Resources:
