@@ -1,10 +1,10 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "https://api.jomicu.com/products/schemas/createproductmodel.json",
-  "title": "CreateProductModel",
-  "type": "object",
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "https://api.jomicu.com/products/schemas/createproductmodel.json",
+	"title": "CreateProductModel",
+	"type": "object",
 	"required": ["products"],
-  "additionalProperties": false,
+	"additionalProperties": false,
 	"definitions": {
 		"product": {
 			"type": "object",
@@ -22,17 +22,17 @@
 				},
 				"type": {
 					"enum": [
-						"food", 
-						"clothes", 
-						"furniture"
+						"Food", 
+						"Clothes", 
+						"Furniture"
 					]
 				},
 				"unit": {
 					"type": "string",
 					"enum": [
-						"unit", 
-						"kilograms", 
-						"meters"
+						"Unit", 
+						"Kilograms", 
+						"Meters"
 					]
 				},
 				"description": {
@@ -42,23 +42,23 @@
 				},
 				"tags": {
 					"type": "array",
-					"items": {
-						"type": "string"
-					},
 					"uniqueItems": true,
 					"minItems": 0,
-					"maxItems": 5
+					"maxItems": 5,
+					"items": {
+						"type": "string"
+					}
 				}
 			}
 		}
 	},
-  "properties": {
+  	"properties": {
 		"products": {
 			"type": "array",
 			"minItems": 1,
-      "maxItems": 50,
-      "uniqueItems": true,
-      "title": "The products array holding products to be created",
+      	"maxItems": 50,
+      	"uniqueItems": true,
+     	"title": "The products array holding products to be created",
 			"items": { "$ref": "#/definitions/product" }
 		}
 	}

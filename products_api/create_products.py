@@ -19,7 +19,7 @@ def handler(event, context):
     request_body = RequestBody(**handle_request_body(event["body"]))
 
     products = [Product(id=str(uuid4()), **product) for product in request_body.products]
-    
+
     products_table = ProductsTable()
     products_table.save_products(products)
 
