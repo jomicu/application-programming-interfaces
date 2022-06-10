@@ -1,11 +1,11 @@
-from logging import info, getLogger
+from logging import INFO, getLogger
 import json
 
 from common.enums import NamingConventions
 from common.transform import TransformDictionary
 
 logger = getLogger()
-logger.setLevel(info())
+logger.setLevel(INFO)
 
 def handle_request_body(body: str):
     body = json.loads(body)

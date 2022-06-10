@@ -1,12 +1,12 @@
 from os import environ
-from logging import info, getLogger
+from logging import INFO, getLogger
 from dataclasses import asdict
 
 from common.models.product import Product
 from common.aws.dynamo import DynamoDB
 
 logger = getLogger()
-logger.setLevel(info())
+logger.setLevel(INFO)
 
 class ProductsTable(DynamoDB):
 
