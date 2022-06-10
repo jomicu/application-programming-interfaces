@@ -6,7 +6,7 @@ from common.models.product import Product
 from common.aws.dynamo import DynamoDB
 
 logger = getLogger()
-logger.setLevel(info)
+logger.setLevel(info())
 
 class ProductsTable(DynamoDB):
 

@@ -5,7 +5,7 @@ from common.enums import NamingConventions
 from common.transform import TransformDictionary
 
 logger = getLogger()
-logger.setLevel(info)
+logger.setLevel(info())
 
 def handle_request_body(body: str):
     body = json.loads(body)
