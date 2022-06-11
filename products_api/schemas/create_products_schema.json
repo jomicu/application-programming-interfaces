@@ -56,9 +56,9 @@
 		"products": {
 			"type": "array",
 			"minItems": 1,
-      	"maxItems": 50,
-      	"uniqueItems": true,
-     	"title": "The products array holding products to be created",
+      		"maxItems": 50,
+      		"uniqueItems": true,
+     		"title": "The products array holding products to be created",
 			"items": { "$ref": "#/definitions/product" }
 		}
 	}

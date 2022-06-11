@@ -1,0 +1,201 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Products API",
+        "description": "A Products API.",
+        "version": "1.0"
+    },
+    "paths": {
+        "/products": {
+            "post": {
+                "operationId": "Create Product",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateProductsRequestBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateProductsResponseBody"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "x-amazon-apigateway-cors": {
+        "allowOrigins": [
+            "*"
+        ],
+        "allowMethods": [
+            "GET",
+            "POST"
+        ],
+        "allowHeaders": [
+            "x-amzm-header",
+            "x-apigateway-header",
+            "x-api-key",
+            "authorization",
+            "x-amz-date",
+            "content-type"
+        ]
+    },
+    "components": {
+        "schemas": {
+            "CreateProductsRequestBody": {
+                "type": "object",
+                "properties": {
+                    "products": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 50,
+                        "uniqueItems": true,
+                        "description": "The products array holding products to be created",
+                        "items": {
+                            "type": "object",
+                            "required": [
+                                "name",
+                                "type",
+                                "unit"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "$ref": "#/components/schemas/ProductName"
+                                },
+                                "type": {
+                                    "$ref": "#/components/schemas/ProductType"
+                                },
+                                "unit": {
+                                    "$ref": "#/components/schemas/ProductUnit"
+                                },
+                                "brand": {
+                                    "$ref": "#/components/schemas/ProductBrand"
+                                },
+                                "description": {
+                                    "$ref": "#/components/schemas/ProductDescription"
+                                },
+                                "tags": {
+                                    "$ref": "#/components/schemas/ProductTags"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "CreateProductsResponseBody": {
+                "type": "object",
+                "properties": {
+                    "products": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 50,
+                        "uniqueItems": true,
+                        "description": "List of products that have been created",
+                        "items": {
+                            "type": "object",
+                            "required": [
+                                "id",
+                                "name",
+                                "type",
+                                "unit",
+                                "pictures",
+                                "brand",
+                                "description",
+                                "tags"
+                            ],
+                            "properties": {
+                                "id": {
+                                    "$ref": "#/components/schemas/ProductId"
+                                },
+                                "name": {
+                                    "$ref": "#/components/schemas/ProductName"
+                                },
+                                "type": {
+                                    "$ref": "#/components/schemas/ProductType"
+                                },
+                                "unit": {
+                                    "$ref": "#/components/schemas/ProductUnit"
+                                },
+                                "pictures": {
+                                    "$ref": "#/components/schemas/ProductPictures"
+                                },
+                                "brand": {
+                                    "$ref": "#/components/schemas/ProductBrand"
+                                },
+                                "description": {
+                                    "$ref": "#/components/schemas/ProductDescription"
+                                },
+                                "tags": {
+                                    "$ref": "#/components/schemas/ProductTags"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "ProductId": {
+                "type": "string"
+            },
+            "ProductName": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 50
+            },
+            "ProductType": {
+                "type": "string",
+                "enum": [
+                    "Food",
+                    "Clothes",
+                    "Furniture"
+                ]
+            },
+            "ProductUnit": {
+                "type": "string",
+                "enum": [
+                    "Unit",
+                    "Kilograms",
+                    "Meters"
+                ]
+            },
+            "ProductPictures": {
+                "type": "array",
+                "uniqueItems": true,
+                "minItems": 0,
+                "maxItems": 5,
+                "items": {
+                    "type": "string"
+                }
+            },
+            "ProductBrand": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 50
+            },
+            "ProductDescription": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 150
+            },
+            "ProductTags": {
+                "type": "array",
+                "uniqueItems": true,
+                "minItems": 0,
+                "maxItems": 5,
+                "items": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
