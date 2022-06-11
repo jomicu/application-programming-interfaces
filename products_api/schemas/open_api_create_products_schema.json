@@ -1,27 +1,24 @@
 {
     "openapi": "3.0.1",
     "info": {
-        "title": "Products API",
-        "description": "A Products API.",
+        "title": "Create Products Lambda",
         "version": "1.0"
     },
     "paths": {
-        "/products": {
+        "/create-product": {
             "post": {
-                "operationId": "Create Product",
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/CreateProductsRequestBody"
                             }
                         }
-                    },
-                    "required": true
+                    }
                 },
                 "responses": {
                     "200": {
-                        "description": "Success",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -33,23 +30,6 @@
                 }
             }
         }
-    },
-    "x-amazon-apigateway-cors": {
-        "allowOrigins": [
-            "*"
-        ],
-        "allowMethods": [
-            "GET",
-            "POST"
-        ],
-        "allowHeaders": [
-            "x-amzm-header",
-            "x-apigateway-header",
-            "x-api-key",
-            "authorization",
-            "x-amz-date",
-            "content-type"
-        ]
     },
     "components": {
         "schemas": {

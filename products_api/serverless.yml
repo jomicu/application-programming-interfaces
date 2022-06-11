@@ -118,7 +118,7 @@ functions:
           request:
             schemas:
               application/json:
-                schema: ${file(schemas/create_products_schema.json)}
+                schema: ${file(schemas/open_api_create_products_schema.json)}
                 name: PostCreateProduct
                 description: Validation model for Creating Products
 
