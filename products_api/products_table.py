@@ -26,15 +26,20 @@ class ProductsTable(DynamoDatabase):
 
     def get(self, id: str = None, name: str = None, brand: str = None) -> list[Product]:
         if id is not None:
-            return self._query(sort_key=id)
+            logger.info(f"Searching for product with id: {id}")
+            items = self._query(sort_key=id)
+        elif name is not None:
+            logger.info(f"Searching for products with name: {name}")
+            items = self._query(hash_key=name)
+        elif brand is not None:
+            logger.info(f"Searching for products from the brand: {brand}")
+            # TODO
+        else:
+            raise ValueError("Provided property values are not valid. All of them were defined as None.")
 
-        if name is not None:
-            return self._query(hash_key=name)
-
-        if brand is not None:
-            return 
-
-        raise ValueError("Provided property values are not valid. All of them were defined as None.")
+        products = [Product(**item) for item in items]
+        logger.info(f"Products found: {products}")
+        return products
 
     def update(self):
         pass

@@ -25,6 +25,10 @@ def handler(event, context):
         raise ValueError("Expected exactly 1 query string parameter but less or more were given.")
 
     products_table = ProductsTable()
-    products = products_table.get(**queryStringParameters)
+    products: list[Product] = products_table.get(**queryStringParameters)
 
-    return handle_response(event, 201, asdict_without_nones(ResponseBody(products)))
+    if len(products) == 0:
+        # TODO
+        return handle_response(event, 404)
+
+    return handle_response(event, 200, asdict_without_nones(ResponseBody(products)))
