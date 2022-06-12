@@ -1,7 +1,7 @@
 from dataclasses import dataclass, asdict
 from uuid import uuid4
 
-from common.api import handle_request_body, handle_response
+from common.api import handle_request, handle_response
 from common.models.product import Product
 from products_table import ProductsTable
 
@@ -16,11 +16,12 @@ class ResponseBody(object):
     products: list[Product]    
 
 def handler(event, context):
-    request_body = RequestBody(**handle_request_body(event["body"]))
+    request = handle_request(event)
+    request_body = RequestBody(**request["body"])
 
     products = [Product(id=str(uuid4()), **product) for product in request_body.products]
 
     products_table = ProductsTable()
-    products_table.save_products(products)
+    products_table.save(products)
 
     return handle_response(event, 201, asdict(ResponseBody(products)))

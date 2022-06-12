@@ -122,7 +122,6 @@ class TransformToDictionary(object):
 
 class TransformDictionary(object):
 
-
     @staticmethod
     def _update_key_names(dictionary: dict, parser: Callable) -> dict:
         updated_dict = dict()
@@ -133,7 +132,6 @@ class TransformDictionary(object):
             else:
                 updated_dict[new_key] = value
         return updated_dict
-
 
     """
     This function will iterate over the given dictionary keys and will update them accordingly

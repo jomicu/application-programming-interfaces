@@ -8,3 +8,5 @@ def custom_dataclass(dataclass):
         return wrapper_func
     return decorator(dataclass)
 
+def exceptions_handler():
+    pass

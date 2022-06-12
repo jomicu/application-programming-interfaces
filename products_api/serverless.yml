@@ -32,6 +32,8 @@ provider:
     lambda: true
  
 custom:
+  tenant: Products
+
   # Common configuration
   bucket: ${file(../serverless_settings/buckets.yml):${self:provider.stage}}
   domain: ${file(../serverless_settings/domains.yml):${self:provider.stage}}
@@ -79,7 +81,7 @@ functions:
         - ../common/utilities.py
         - ../common/decorators.py
         - ../common/enums.py
-        - ../common/aws/dynamo.py
+        - ../common/aws/dynamo_database.py
         - ../common/models/product.py
         - ../common/transform.py
         - products_table.py
@@ -89,9 +91,6 @@ functions:
     iamRoleStatements:
       - Effect: Allow
         Action:
-          # - dynamodb:Query
-          # - dynamodb:Scan
-          # - dynamodb:GetItem
           - dynamodb:PutItem
           - dynamodb:BatchWriteItem
         Resource:
@@ -99,11 +98,12 @@ functions:
             - ProductsTable
             - Arn
     environment:
+      STAGE: ${self:provider.stage}
       PRODUCTS_TABLE_NAME:
         Ref: ProductsTable
     events:
       - http:
-          path: /create-product
+          path: /create-products
           method: post
           private: ${self:custom.apiKeyOnlyAccess.${self:provider.stage}}
           cors:
@@ -118,17 +118,68 @@ functions:
           request:
             schemas:
               application/json:
-                schema: ${file(schemas/open_api_create_products_schema.json)}
-                name: PostCreateProduct
+                schema: ${file(schemas/create_products_schema.json)}
+                name: PostCreateProducts
                 description: Validation model for Creating Products
-
+  getProducts:
+    name: ${self:provider.stage}-${self:service}-GetProducts
+    description: Responsible for retrieving products
+    runtime: python3.9
+    timeout: 10
+    package:
+      include:
+        - ../common/exceptions.py
+        - ../common/api.py
+        - ../common/utilities.py
+        - ../common/decorators.py
+        - ../common/enums.py
+        - ../common/aws/dynamo_database.py
+        - ../common/models/product.py
+        - ../common/transform.py
+        - products_table.py
+        - get_products.py
+    handler: get_products.handler
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+          - dynamodb:Scan
+          - dynamodb:GetItem
+        Resource:
+          Fn::GetAtt:
+            - ProductsTable
+            - Arn
+    environment:
+      PRODUCTS_TABLE_NAME:
+        Ref: ProductsTable
+    events:
+      - http:
+          path: /get-products
+          method: get
+          private: ${self:custom.apiKeyOnlyAccess.${self:provider.stage}}
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+          request:
+            schemas:
+              application/json:
+                schema: ${file(schemas/get_products_schema.json)}
+                name: GetGetProducts
+                description: Validation model for Getting Products
 
 resources:
   Resources:
     ProductsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Products
+        TableName: ${self:custom.tenant}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: Id
@@ -136,6 +187,17 @@ resources:
         KeySchema:
           - AttributeName: Id
             KeyType: HASH
+          - AttributeName: 
+            KeyType: SORT
+    ProductsCountParameter:
+      Type: AWS::SSM::Parameter
+      Properties:
+        Name: /${self:provider.stage}/${self:custom.tenant}/count
+        Type: String
+        Value: 0
+        Tags:
+          Environment: ${self:provider.stage}
+          Tenant: ${self:custom.tenant}
 
   # Outputs:
     # CreateUserLambdaArn:

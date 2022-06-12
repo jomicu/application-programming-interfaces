@@ -7,12 +7,14 @@ from common.transform import TransformDictionary
 logger = getLogger()
 logger.setLevel(INFO)
 
-def handle_request_body(body: str):
-    body = json.loads(body)
-    logger.info(f"Received request_body: {json.dumps(body)}")
-    transformed_body = TransformDictionary.update_naming_convention(body, NamingConventions.CAMEL, NamingConventions.SNAKE)
-    logger.info(f"Received (transformed) request_body: {json.dumps(transformed_body)}")
-    return transformed_body
+def handle_request(request: dict) -> dict:
+    logger.info(f"Received request: {json.dumps(request)}")
+    request["queryStringParameters"] = TransformDictionary.update_naming_convention(request["queryStringParameters"], NamingConventions.CAMEL, NamingConventions.SNAKE)
+    request["pathParameters"] = TransformDictionary.update_naming_convention(request["pathParameters"], NamingConventions.CAMEL, NamingConventions.SNAKE)
+    request["body"] = TransformDictionary.update_naming_convention(request["body"], NamingConventions.CAMEL, NamingConventions.SNAKE)
+    logger.info(f"Received (transformed) requesy: {json.dumps(request)}")
+    return request
+
 
 # TODO cors and headers
 def handle_response(event: dict, status_code: int, body: dict = None):

@@ -2,7 +2,7 @@ from os import environ
 
 
 from common.transform import TransformToDictionary
-from common.aws.dynamo import DynamoDB
+from common.aws.dynamo_database import DynamoDB
 
 
 class UsersTable(DynamoDB):
