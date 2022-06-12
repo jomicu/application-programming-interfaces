@@ -167,12 +167,12 @@ functions:
               - X-Api-Key
               - X-Amz-Security-Token
               - X-Amz-User-Agent
-          request:
-            schemas:
-              application/json:
-                schema: ${file(schemas/get_products_schema.json)}
-                name: GetGetProducts
-                description: Validation model for Getting Products
+          # request:
+          #   schemas:
+          #     application/json:
+          #       schema: ${file(schemas/get_products_schema.json)}
+          #       name: GetGetProducts
+          #       description: Validation model for Getting Products
 
 resources:
   Resources:
@@ -187,8 +187,8 @@ resources:
         KeySchema:
           - AttributeName: Id
             KeyType: HASH
-          - AttributeName: 
-            KeyType: SORT
+          # - AttributeName: 
+          #   KeyType: SORT
     ProductsCountParameter:
       Type: AWS::SSM::Parameter
       Properties:
