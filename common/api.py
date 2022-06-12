@@ -17,7 +17,7 @@ def handle_request(request: dict) -> dict:
         request["pathParameters"] = TransformDictionary.update_naming_convention(request["pathParameters"], NamingConventions.CAMEL, NamingConventions.SNAKE)
     
     if request["body"] is not None:
-        request["body"] = TransformDictionary.update_naming_convention(request["body"], NamingConventions.CAMEL, NamingConventions.SNAKE)
+        request["body"] = TransformDictionary.update_naming_convention(json.loads(request["body"]), NamingConventions.CAMEL, NamingConventions.SNAKE)
     
     logger.info(f"Received (transformed) requesy: {json.dumps(request)}")
     return request
