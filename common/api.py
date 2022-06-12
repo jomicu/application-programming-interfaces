@@ -10,13 +10,13 @@ logger.setLevel(INFO)
 def handle_request(request: dict) -> dict:
     logger.info(f"Received request: {json.dumps(request)}")
 
-    if "queryStringParameters" in request:
+    if request["queryStringParameters"] is not None:
         request["queryStringParameters"] = TransformDictionary.update_naming_convention(request["queryStringParameters"], NamingConventions.CAMEL, NamingConventions.SNAKE)
     
-    if "pathParameters" in request:
+    if request["pathParameters"] is not None:
         request["pathParameters"] = TransformDictionary.update_naming_convention(request["pathParameters"], NamingConventions.CAMEL, NamingConventions.SNAKE)
     
-    if "body" in request:
+    if request["body"] is not None:
         request["body"] = TransformDictionary.update_naming_convention(request["body"], NamingConventions.CAMEL, NamingConventions.SNAKE)
     
     logger.info(f"Received (transformed) requesy: {json.dumps(request)}")
