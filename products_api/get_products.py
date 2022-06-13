@@ -31,4 +31,6 @@ def handler(event, context):
         # TODO
         return handle_response(event, 404)
 
+    print(products)
+
     return handle_response(event, 200, asdict_without_nones(ResponseBody(products)))

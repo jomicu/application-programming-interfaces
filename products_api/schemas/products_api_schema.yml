@@ -1,0 +1,123 @@
+openapi: "3.0.2"
+
+info:
+  title: Products API
+  version: "1.0"
+
+servers:
+  - url: https://api-development.jomicu.com/products
+  - url: https://api.jomicu.com/products
+
+x-amazon-apigateway-request-validators:
+  full:
+    validateRequestParameters: true
+    validateRequestBody: true
+  parameters-only:
+    validateRequestParameters: true
+    validateRequestBody: false
+  body-only:
+    validateRequestParameters: false
+    validateRequestBody: true
+
+x-amazon-apigateway-request-validator: "full"
+
+paths:
+  /create-products:
+    post:
+      x-amazon-apigateway-request-validator: "body-only"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/CreateProductModel"
+      responses:
+        "200":
+          description: OK
+  /get-products?id={productId}:
+    get:
+      x-amazon-apigateway-request-validator: "parameters-only"
+      parameters:
+        - description: "Product unique identifier"
+          in: "query"
+          name: productId
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: OK
+  /get-products?name={productName}:
+    get:
+      x-amazon-apigateway-request-validator: "parameters-only"
+      parameters:
+        - description: "Product name"
+          in: "query"
+          name: productName
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: OK
+
+components:
+  schemas:
+    ProductId:
+      type: "string"
+      minLength: 1
+      maxLength: 50
+    ProductName:
+      type: "string"
+      minLength: 1
+      maxLength: 50
+    ProductBrand:
+      type: "string"
+      minLength: 1
+      maxLength: 50
+    ProductType:
+      type: "string"
+      enum:
+        - "Food"
+        - "Clothes"
+        - "Furniture"
+    ProductUnit:
+      type: "string"
+      enum:
+        - "Unit"
+        - "Kilogram"
+        - "Meters"
+    ProductDescription:
+      type: "string"
+      minLength: 1
+      maxLength: 150
+    ProductTags:
+      type: "array"
+      uniqueItems: true
+      minItems: 0
+      maxItems: 5
+      items:
+        type: "string"
+  requestBodies:
+    CreateProductModel:
+      content:
+        application/json:
+          schema:
+            type: "object"
+            required:
+              - "name"
+              - "type"
+              - "unit"
+            properties:
+              name:
+                $ref: "#/components/schemas/ProductName"
+              brand:
+                $ref: "#/components/schemas/ProductBrand"
+              type:
+                $ref: "#/components/schemas/ProductType"
+              unit:
+                $ref: "#/components/schemas/ProductUnit"
+              description:
+                $ref: "#/components/schemas/ProductDescription"
+              tags:
+                $ref: "#/components/schemas/ProductTags"

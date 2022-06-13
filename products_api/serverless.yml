@@ -1,5 +1,5 @@
 service: ProductsAPI
-	
+
 frameworkVersion: "3.19.0" # Lock Serverless version
 
 plugins:
@@ -26,6 +26,13 @@ provider:
     apiKeys:
       - ${self:provider.stage}-${self:service}-key
     apiKeySourceType: HEADER
+    request:
+      schemas:
+        post-create-model:
+          name: PostCreateModel
+          schema: ${file(products_api_schema.json)}
+          description: "A Model validation for adding posts"
+  
 
   tracing:
     apiGateway: true
@@ -105,7 +112,7 @@ functions:
       - http:
           path: /create-products
           method: post
-          private: ${self:custom.apiKeyOnlyAccess.${self:provider.stage}}
+          private: true
           cors:
             origin: "*"
             headers:
@@ -116,11 +123,8 @@ functions:
               - X-Amz-Security-Token
               - X-Amz-User-Agent
           request:
-            schemas:
-              application/json:
-                schema: ${file(schemas/create_products_schema.json)}
-                name: PostCreateProducts
-                description: Validation model for Creating Products
+            schema:
+              application/json: ${file(schemas/create_products_schema.json)}
   getProducts:
     name: ${self:provider.stage}-${self:service}-GetProducts
     description: Responsible for retrieving products
@@ -157,7 +161,7 @@ functions:
       - http:
           path: /get-products
           method: get
-          private: ${self:custom.apiKeyOnlyAccess.${self:provider.stage}}
+          private: true
           cors:
             origin: "*"
             headers:
@@ -167,12 +171,28 @@ functions:
               - X-Api-Key
               - X-Amz-Security-Token
               - X-Amz-User-Agent
-          # request:
-          #   schemas:
-          #     application/json:
-          #       schema: ${file(schemas/get_products_schema.json)}
-          #       name: GetGetProducts
-          #       description: Validation model for Getting Products
+          request:
+            parameters:
+              querystrings:
+                id: true
+      - http:
+          path: /get-products
+          method: get
+          private: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+          request:
+            parameters:
+              querystrings:
+                name: true
+      
 
 resources:
   Resources:
@@ -194,7 +214,7 @@ resources:
       Properties:
         Name: /${self:provider.stage}/${self:custom.tenant}/count
         Type: String
-        Value: 0
+        Value: "0"
         Tags:
           Environment: ${self:provider.stage}
           Tenant: ${self:custom.tenant}
