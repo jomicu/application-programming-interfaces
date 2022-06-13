@@ -152,7 +152,7 @@ functions:
         Ref: ProductsTable
     events:
       - http:
-          path: /get-products
+          path: /get-products?id={productId}
           method: get
           private: true
           cors:
@@ -169,7 +169,7 @@ functions:
               querystrings:
                 id: true
       - http:
-          path: /get-products
+          path: /get-products?name={productName}
           method: get
           private: true
           cors:
