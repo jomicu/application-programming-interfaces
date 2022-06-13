@@ -26,13 +26,6 @@ provider:
     apiKeys:
       - ${self:provider.stage}-${self:service}-key
     apiKeySourceType: HEADER
-    request:
-      schemas:
-        post-create-model:
-          name: PostCreateModel
-          schema: ${file(products_api_schema.json)}
-          description: "A Model validation for adding posts"
-  
 
   tracing:
     apiGateway: true
@@ -215,9 +208,9 @@ resources:
         Name: /${self:provider.stage}/${self:custom.tenant}/count
         Type: String
         Value: "0"
-        Tags:
-          Environment: ${self:provider.stage}
-          Tenant: ${self:custom.tenant}
+        # Tags:
+        #   Environment: ${self:provider.stage}
+        #   Tenant: ${self:custom.tenant}
 
   # Outputs:
     # CreateUserLambdaArn:
