@@ -105,6 +105,7 @@ functions:
       - http:
           path: /create-products
           method: post
+          integration: lambda
           private: true
           cors:
             origin: "*"
@@ -116,6 +117,9 @@ functions:
               - X-Amz-Security-Token
               - X-Amz-User-Agent
           request:
+            passThrough: NEVER
+            template:
+              application/json: ${file(create_products_template.vcl)}
             schema:
               application/json: ${file(schemas/create_products_schema.json)}
   getProducts:
@@ -152,7 +156,7 @@ functions:
         Ref: ProductsTable
     events:
       - http:
-          path: /get-products?id={productId}
+          path: /get-products
           method: get
           private: true
           cors:
@@ -167,25 +171,8 @@ functions:
           request:
             parameters:
               querystrings:
-                id: true
-      - http:
-          path: /get-products?name={productName}
-          method: get
-          private: true
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-          request:
-            parameters:
-              querystrings:
-                name: true
-      
+                id: false
+                name: false
 
 resources:
   Resources:
