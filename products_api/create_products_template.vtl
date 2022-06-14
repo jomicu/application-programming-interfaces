@@ -1,4 +1,4 @@
-#set($inputRoot = $input.path('$')) {
+#set($inputRoot = $util.parseJson($input.body)) {
   "name": $inputRoot.name
   "type": $inputRoot.type
   "unit": $inputRoot.unit
@@ -7,3 +7,23 @@
   "description": $inputRoot.description
   "tags": $inputRoot.tags
 }
+
+#set($transformedInput = {})
+#set($transformedInput.name = $inputRoot.name)
+#set($transformedInput.type = $inputRoot.type)
+#set($transformedInput.unit = $inputRoot.unit)
+#set($transformedInput.very_long_string = $inputRoot.veryLongString)
+
+#if($inputRoot.brand)
+  #set($transformedInput.brand = $inputRoot.brand)
+#end
+
+#if($inputRoot.description)
+  #set($transformedInput.description = $inputRoot.description)
+#end
+
+#if($inputRoot.tags)
+  #set($transformedInput.tags = $inputRoot.tags)
+#end
+
+#set($inputRoot = $transformedInput)
