@@ -119,7 +119,7 @@ functions:
           request:
             passThrough: NEVER
             template:
-              application/json: ${file(create_products_template.vcl)}
+              application/json: ${file(create_products_template.vtl)}
             schema:
               application/json: ${file(schemas/create_products_schema.json)}
   getProducts:
