@@ -118,10 +118,10 @@ functions:
               - X-Amz-User-Agent
           request:
             passThrough: NEVER
+            schema:
+              application/json: ${file(schemas/create_products_schema.json)}
             template:
               application/json: ${file(create_products_template.vtl)}
-            # schema:
-            #   application/json: ${file(schemas/create_products_schema.json)}
   getProducts:
     name: ${self:provider.stage}-${self:service}-GetProducts
     description: Responsible for retrieving products
