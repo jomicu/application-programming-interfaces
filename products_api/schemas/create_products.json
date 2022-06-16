@@ -8,11 +8,8 @@
 	"definitions": {
 		"product": {
 			"type": "object",
-			"required": ["name", "type", "unit", "veryLongAttribute"],
+			"required": ["name", "type", "unit"],
 			"properties": {
-				"veryLongAttribute": {
-					"type": "string"
-				},
 				"name": {
 					"type": "string",
 					"minLength": 1,
