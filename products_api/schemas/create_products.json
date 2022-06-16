@@ -8,7 +8,7 @@
 	"definitions": {
 		"product": {
 			"type": "object",
-			"required": ["name", "type", "unit"],
+			"required": ["name", "type", "unit", "veryLongAttribute"],
 			"properties": {
 				"veryLongAttribute": {
 					"type": "string"
