@@ -84,7 +84,7 @@ functions:
         - ../common/aws/dynamo_database.py
         - ../common/models/product.py
         - ../common/transform.py
-        - products_table.py
+        - library/products_table.py
         - create_products.py
     handler: create_products.handler
     iamRoleStatementsInherit: true
@@ -121,7 +121,7 @@ functions:
             schemas:
               application/json: ${file(schemas/create_products.json)}
             template:
-              application/json: ${file(create_products_template.vtl)}
+              application/json: ${file(templates/create_products_template.vtl)}
   getProducts:
     name: ${self:provider.stage}-${self:service}-GetProducts
     description: Responsible for retrieving products
@@ -137,7 +137,7 @@ functions:
         - ../common/aws/dynamo_database.py
         - ../common/models/product.py
         - ../common/transform.py
-        - products_table.py
+        - library/products_table.py
         - get_products.py
     handler: get_products.handler
     iamRoleStatementsInherit: true
@@ -156,6 +156,23 @@ functions:
         Ref: ProductsTable
     events:
       - http:
+          path: /get-product
+          method: get
+          private: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+          request:
+            parameters:
+              querystrings:
+                id: true
+      - http:
           path: /get-products
           method: get
           private: true
@@ -171,8 +188,9 @@ functions:
           request:
             parameters:
               querystrings:
-                id: false
                 name: false
+                brand: false
+
 
 resources:
   Resources:

@@ -1,9 +1,9 @@
 from dataclasses import dataclass, asdict
 from uuid import uuid4
 
-from common.api import handle_request, handle_response
+from common.api import handle_response
 from common.models.product import Product
-from products_table import ProductsTable
+from library.products_table import ProductsTable
 
 @dataclass(frozen=True)
 class RequestBody(object):
@@ -16,8 +16,7 @@ class ResponseBody(object):
     products: list[Product]    
 
 def handler(event, context):
-    request = handle_request(event)
-    request_body = RequestBody(**request["body"])
+    request_body = RequestBody(**event)
 
     products = [Product(id=str(uuid4()), **product) for product in request_body.products]
 
