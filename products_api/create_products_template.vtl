@@ -3,18 +3,19 @@
 {
   "products": [
     #foreach($product in $products) 
+      $util.toJson($product),
       {
         "name": "$product.name",
         "type": "$product.type",
         "unit": "$product.unit",
         "very_long_attribute": "$product.veryLongAttribute"
-        #if($product.brand),
+        #if($product.brand != null),
           "brand": "$product.brand"
         #end
-        #if($product.description),
+        #if($product.description != null),
           "description": "$product.description"
         #end
-        #if($product.tags),
+        #if($product.tags != null),
           "tags": $product.tags
         #end
       }#if($foreach.hasNext),#end
