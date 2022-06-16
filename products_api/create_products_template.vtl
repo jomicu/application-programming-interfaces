@@ -1,16 +1,13 @@
-#set($data = $input.path('$'))
-#set($products = $input.path('$.products'))
-
-{
+#set($products = $input.path('$.products')) {
   "products": [
-    #foreach($product in products) 
+    #foreach($product in $products) 
       {
         "name": $product.name,
         "type": $product.type,
         "unit": $product.unit,
         "very_long_string": $product.veryLongString,
-        "brand": #if($product.brand) $product.brand #else "Unknown",
-        "description": #if($product.description) $product.description #else "",
+        "brand": #if($product.brand) $product.brand #else '' #end,
+        "description": #if($product.description) $product.description #else '' #end,
         "tags": #if($product.tags) $product.tags #else []
       }
       #if($foreach.hasNext),#end
