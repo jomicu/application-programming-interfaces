@@ -121,7 +121,12 @@ functions:
             schemas:
               application/json: ${file(schemas/create_products.json)}
             template:
-              application/json: ${file(templates/create_products_template.vtl)}
+              application/json: ${file(templates/create_products_request.vtl)}
+          responses:
+            statusCodes:
+              201:
+                template:
+                  application/json: ${file(templates/create_products_response.vtl)}
   getProducts:
     name: ${self:provider.stage}-${self:service}-GetProducts
     description: Responsible for retrieving products
