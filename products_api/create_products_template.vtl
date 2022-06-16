@@ -9,14 +9,8 @@
         "type": "$product.type",
         "unit": "$product.unit",
         "very_long_attribute": "$product.veryLongAttribute"
-        #if($product.brand != null),
+        #if("brand" in $product),
           "brand": "$product.brand"
-        #end
-        #if($product.description != null),
-          "description": "$product.description"
-        #end
-        #if($product.tags != null),
-          "tags": $product.tags
         #end
       }#if($foreach.hasNext),#end
     #end
