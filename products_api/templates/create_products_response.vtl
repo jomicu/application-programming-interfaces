@@ -1,18 +1,20 @@
-#set($statusCode = $input.path('$'))
+#set($statusCode = $input.path('$.status_code'))
 #set($products = $input.path('$.products')) 
 
 {
   "statusCode": "$statusCode",
-  "products": [
-    #foreach($product in $products) 
-      {
-        "name": "$product.name",
-        "type": "$product.type",
-        "unit": "$product.unit",
-        "brand": "$product.brand",
-        "description": "$product.description",
-        "tags": $product.tags
-      }#if($foreach.hasNext),#end
-    #end
-  ]
+  "body": {
+    "products": [
+      #foreach($product in $products) 
+        {
+          "name": "$product.name",
+          "type": "$product.type",
+          "unit": "$product.unit",
+          "brand": "$product.brand",
+          "description": "$product.description",
+          "tags": $product.tags
+        }#if($foreach.hasNext),#end
+      #end
+    ]
+  }
 }

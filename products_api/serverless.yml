@@ -84,7 +84,7 @@ functions:
         - ../common/aws/dynamo_database.py
         - ../common/models/product.py
         - ../common/transform.py
-        - library/products_table.py
+        - lib/products_table.py
         - create_products.py
     handler: create_products.handler
     iamRoleStatementsInherit: true
@@ -124,7 +124,7 @@ functions:
               application/json: ${file(templates/create_products_request.vtl)}
           responses:
             statusCodes:
-              201:
+              200:
                 template:
                   application/json: ${file(templates/create_products_response.vtl)}
   getProducts:
@@ -142,7 +142,7 @@ functions:
         - ../common/aws/dynamo_database.py
         - ../common/models/product.py
         - ../common/transform.py
-        - library/products_table.py
+        - lib/products_table.py
         - get_products.py
     handler: get_products.handler
     iamRoleStatementsInherit: true
