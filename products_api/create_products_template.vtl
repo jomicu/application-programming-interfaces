@@ -1,15 +1,34 @@
-#set($products = $input.path('$.products')) {
+#set($products = $input.path('$.products')) 
+
+#set($transformedProducts = [])
+
+#foreach($product in $products)
+  #set($transformedProduct = {})
+
+  #set($dummy = $transformedProduct.put("name", $product.name))
+  #set($dummy = $transformedProduct.put("type", $product.type))
+  #set($dummy = $transformedProduct.put("unit", $product.unit))
+  #set($dummy = $transformedProduct.put("very_long_attribute", $product.veryLongAttribute))
+
+  #if($product.brand)
+    #set($dummy = $transformedProduct.put("brand", $product.brand))
+  #end
+
+  #if($product.description)
+    #set($dummy = $transformedProduct.put("description", $product.description))
+  #end
+
+  #if($product.tags)
+    #set($dummy = $transformedProduct.put("tags", $product.tags))
+  #end
+
+  #set($dummy = $transformedProducts.add($product))
+#end
+
+{
   "products": [
-    #foreach($product in $products) 
-      {
-        "name": $product.name,
-        "type": $product.type,
-        "unit": $product.unit,
-        "very_long_string": $product.veryLongString,
-        "brand": #if($product.brand) $product.brand #else '' #end,
-        "description": #if($product.description) $product.description #else '' #end,
-        "tags": #if($product.tags) $product.tags #else []
-      }
+    #foreach($product in $transformedProducts) 
+      $product
       #if($foreach.hasNext),#end
     #end
   ]
