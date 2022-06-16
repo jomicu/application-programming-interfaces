@@ -4,15 +4,15 @@
   "products": [
     #foreach($product in $products) 
       {
-        "name": $product.name,
-        "type": $product.type,
-        "unit": $product.unit,
-        "very_long_attribute": $product.veryLongAttribute
+        "name": "$product.name",
+        "type": "$product.type",
+        "unit": "$product.unit",
+        "very_long_attribute": "$product.veryLongAttribute"
         #if($product.brand),
-          "brand": $product.brand
+          "brand": "$product.brand"
         #end
         #if($product.description),
-          "description": $product.description
+          "description": "$product.description"
         #end
         #if($product.tags),
           "tags": $product.tags
