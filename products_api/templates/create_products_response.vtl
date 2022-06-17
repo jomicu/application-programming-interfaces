@@ -1,6 +1,7 @@
 #set($statusCode = $input.path('$.status_code'))
 #set($products = $input.path('$.products')) 
 
+#if("$statusCode" == "201")
 {
   "statusCode": "$statusCode",
   "body": {
@@ -18,3 +19,4 @@
     ]
   }
 }
+#end

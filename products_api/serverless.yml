@@ -123,10 +123,9 @@ functions:
             template:
               application/json: ${file(templates/create_products_request.vtl)}
           response:
-            statusCodes:
-              200:
-                template:
-                  application/json: ${file(templates/create_products_response.vtl)}
+            template:
+              application/json: ${file(templates/create_products_response.vtl)}
+
   getProducts:
     name: ${self:provider.stage}-${self:service}-GetProducts
     description: Responsible for retrieving products
