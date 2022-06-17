@@ -124,6 +124,9 @@ functions:
               application/json: ${file(templates/create_products_request.vtl)}
           response:
             template: ${file(templates/create_products_response.vtl)}
+            statusCodes:
+              201:
+                pattern: ''
 
   getProducts:
     name: ${self:provider.stage}-${self:service}-GetProducts
