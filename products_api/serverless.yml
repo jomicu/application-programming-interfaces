@@ -126,7 +126,7 @@ functions:
             template: ${file(templates/create_products_response.vtl)}
             statusCodes:
               201:
-                pattern: ''
+                pattern: '' # Default status code
 
   getProducts:
     name: ${self:provider.stage}-${self:service}-GetProducts

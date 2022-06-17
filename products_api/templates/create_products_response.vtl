@@ -1,7 +1,5 @@
-#set($statusCode = $input.path('$.status_code'))
 #set($products = $input.path('$.products')) 
 
-#if("$statusCode" == "201")
 {
   "products": [
     #foreach($product in $products) 
@@ -10,10 +8,13 @@
         "type": "$product.type",
         "unit": "$product.unit",
         "brand": "$product.brand",
-        "description": "$product.description",
+        #if("$product.description" == "")
+          "description": null,
+        #else
+          "description": "$product.description",
+        #end
         "tags": $product.tags
       }#if($foreach.hasNext),#end
     #end
   ]
 }
-#end
