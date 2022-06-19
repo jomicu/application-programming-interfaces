@@ -3,7 +3,7 @@ from logging import INFO, getLogger
 from dataclasses import asdict
 
 from common.models.product import Product
-from common.aws.dynamo_database import DynamoDatabase
+from common.dynamo_databases import DynamoDatabase
 
 logger = getLogger()
 logger.setLevel(INFO)

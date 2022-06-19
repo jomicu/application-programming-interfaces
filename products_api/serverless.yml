@@ -58,9 +58,9 @@ custom:
     endpointType: "regional"
 
   # Require or not API keys when accessing endpoints
-  apiKeyOnlyAccess:
-    development: true
-    production: true
+  # apiKeyOnlyAccess:
+  #   development: true
+  #   production: true
 
 
 package:
@@ -76,15 +76,12 @@ functions:
     timeout: 10
     package:
       include:
-        - ../common/exceptions.py
-        - ../common/api.py
-        - ../common/utilities.py
-        - ../common/decorators.py
-        - ../common/enums.py
-        - ../common/aws/dynamo_database.py
         - ../common/models/product.py
+        - ../common/dynamo_databases/__init__.py
+        - ../common/dynamo_databases/products.py
+        - ../common/exceptions.py
+        - ../common/utilities.py
         - ../common/transform.py
-        - lib/products_table.py
         - create_products.py
     handler: create_products.handler
     iamRoleStatementsInherit: true
@@ -121,9 +118,9 @@ functions:
             schemas:
               application/json: ${file(schemas/create_products.json)}
             template:
-              application/json: ${file(templates/create_products_request.vtl)}
+              application/json: ${file(templates/create_products/request.vtl)}
           response:
-            template: ${file(templates/create_products_response.vtl)}
+            template: ${file(templates/create_products/response.vtl)}
             statusCodes:
               201:
                 pattern: '' # Default status code
@@ -196,7 +193,6 @@ functions:
               querystrings:
                 brand: false
 
-
 resources:
   Resources:
     ProductsTable:
@@ -207,20 +203,13 @@ resources:
         AttributeDefinitions:
           - AttributeName: Id
             AttributeType: S
+          - AttributeName: Brand
+            AttributeType: S
         KeySchema:
           - AttributeName: Id
             KeyType: HASH
           # - AttributeName: 
           #   KeyType: SORT
-    ProductsCountParameter:
-      Type: AWS::SSM::Parameter
-      Properties:
-        Name: /${self:provider.stage}/${self:custom.tenant}/count
-        Type: String
-        Value: "0"
-        # Tags:
-        #   Environment: ${self:provider.stage}
-        #   Tenant: ${self:custom.tenant}
 
   # Outputs:
     # CreateUserLambdaArn:

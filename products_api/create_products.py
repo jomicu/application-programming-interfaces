@@ -2,7 +2,7 @@ from dataclasses import dataclass, asdict
 from uuid import uuid4
 
 from common.models.product import Product
-from lib.products_table import ProductsTable
+from common.dynamo_databases.products import ProductsTable
 
 @dataclass(frozen=True)
 class Request(object):

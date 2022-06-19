@@ -3,7 +3,7 @@ from dataclasses import dataclass, field, asdict
 from common.utilities import asdict_without_nones
 from common.api import handle_request, handle_response
 from common.models.product import Product
-from lib.products_table import ProductsTable
+from  common.dynamo_databases.products import ProductsTable
 
 @dataclass(frozen=True)
 class RequestQueryParameters(object):

@@ -1,8 +1,7 @@
 from logging import INFO, getLogger
 import json
 
-from common.enums import NamingConventions
-from common.transform import TransformDictionary
+from common.transform import NamingConventions, TransformDictionary
 
 logger = getLogger()
 logger.setLevel(INFO)

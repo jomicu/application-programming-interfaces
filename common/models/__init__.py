@@ -7,6 +7,3 @@ def custom_dataclass(dataclass):
             return dataclass(**{key: kwargs[key] for key in field_names if key in kwargs})
         return wrapper_func
     return decorator(dataclass)
-
-def exceptions_handler():
-    pass
