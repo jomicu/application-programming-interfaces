@@ -14,15 +14,9 @@ class ProductsTable(DynamoDatabase):
         super().__init__(environ.get("PRODUCTS_TABLE_NAME"), "Name", "Id")
 
     def save(self, products: list[Product]) -> None:
-        if len(products) == 1:
-            product = products[0]
-            logger.info(f"Saving the following product {product} to Products table ...")
-            self._put(item=asdict(product))
-            logger.info(f"Finished saving product with id {product.id}!")
-        else:
-            logger.info(f"Saving the following products {products} to Products table ...")
-            self._put(items=[asdict(product) for product in products])
-            logger.info("Finished saving products!")
+        logger.info(f"Saving the following products {products} to Products table ...")
+        self._put(items=[asdict(product) for product in products])
+        logger.info("Finished saving products!")
 
     def get(self, id: str = None, name: str = None, brand: str = None) -> list[Product]:
         if id is not None:
