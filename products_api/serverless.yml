@@ -78,12 +78,6 @@ functions:
       - "${ssm:/${self:provider.stage}/layers/CommonLayer}"
     package:
       include:
-        - ../common/models/product.py
-        - ../common/dynamo_databases/__init__.py
-        - ../common/dynamo_databases/products.py
-        - ../common/exceptions.py
-        - ../common/utilities.py
-        - ../common/transform.py
         - lib/products_database.py
         - create_products.py
     handler: create_products.handler
