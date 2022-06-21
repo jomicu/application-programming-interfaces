@@ -24,13 +24,16 @@ package:
 
 layers:
   common:
-    path: ../common
+    path: ../
     name: ${self:provider.stage}-${self:service}
     description: "Custom common functionality to be shared across lambdas within the organization"
     compatibleRuntimes:
       - python3.9
     licenseInfo: MIT License
-    retain: false
+    retain: true
+    package:
+      include:
+        - common
 
 resources:
   Resources:
