@@ -15,6 +15,8 @@ provider:
     name: ${self:custom.bucket.bucketName}
 
 custom:
+  # Common configuration
+  bucket: ${file(../serverless_settings/buckets.yml):${self:provider.stage}}
   deploymentBucket: ${self:custom.bucket.bucketConfiguration}
 
 package:
