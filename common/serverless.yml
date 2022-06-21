@@ -24,7 +24,7 @@ package:
 
 layers:
   common:
-    path: ../
+    path: .
     name: ${self:provider.stage}-${self:service}
     description: "Custom common functionality to be shared across lambdas within the organization"
     compatibleRuntimes:
@@ -33,7 +33,7 @@ layers:
     retain: true
     package:
       include:
-        - common
+        - ./common
 
 resources:
   Resources:
