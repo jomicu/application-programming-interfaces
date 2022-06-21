@@ -1,8 +1,8 @@
 from os import environ
 from dataclasses import asdict
 
-from common.models.product import Product
-from common.aws.dynamo import DynamoDB
+from models.product import Product
+from dynamo_databases import DynamoDB
 
 class ProductsTable(DynamoDB):
 

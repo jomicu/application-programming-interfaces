@@ -1,7 +1,7 @@
 from dataclasses import dataclass, asdict
 from uuid import uuid4
 
-from common.models.product import Product
+from models.product import Product
 from lib.products_database import ProductsTable
 
 @dataclass(frozen=True)
