@@ -1,11 +1,9 @@
 from dataclasses import dataclass, field
 
 from common.utilities import is_variable_an_dictionary
-from common.decorators import custom_dataclass
 from common.models.contacts import Contacts
 from common.models.address import Address
 
-@custom_dataclass
 @dataclass(frozen=True)
 class User(object):
 

@@ -1,5 +1,5 @@
 service: ProductsAPI
-	
+
 frameworkVersion: "3.19.0" # Lock Serverless version
 
 plugins:
@@ -32,6 +32,8 @@ provider:
     lambda: true
  
 custom:
+  tenant: Products
+
   # Common configuration
   bucket: ${file(../serverless_settings/buckets.yml):${self:provider.stage}}
   domain: ${file(../serverless_settings/domains.yml):${self:provider.stage}}
@@ -56,9 +58,9 @@ custom:
     endpointType: "regional"
 
   # Require or not API keys when accessing endpoints
-  apiKeyOnlyAccess:
-    development: true
-    production: true
+  # apiKeyOnlyAccess:
+  #   development: true
+  #   production: true
 
 
 package:
@@ -72,39 +74,39 @@ functions:
     description: Responsible for creating new products
     runtime: python3.9
     timeout: 10
+    layers:
+      - "${ssm:/${self:provider.stage}/layers/CommonLayer}"
     package:
       include:
-        - ../common/exceptions.py
-        - ../common/api.py
-        - ../common/utilities.py
-        - ../common/decorators.py
-        - ../common/enums.py
-        - ../common/aws/dynamo.py
         - ../common/models/product.py
+        - ../common/dynamo_databases/__init__.py
+        - ../common/dynamo_databases/products.py
+        - ../common/exceptions.py
+        - ../common/utilities.py
         - ../common/transform.py
-        - products_table.py
-        - create_product.py
-    handler: create_product.handler
+        - lib/products_database.py
+        - create_products.py
+    handler: create_products.handler
     iamRoleStatementsInherit: true
     iamRoleStatements:
       - Effect: Allow
         Action:
-          # - dynamodb:Query
-          # - dynamodb:Scan
-          # - dynamodb:GetItem
           - dynamodb:PutItem
+          - dynamodb:BatchWriteItem
         Resource:
           Fn::GetAtt:
             - ProductsTable
             - Arn
     environment:
+      STAGE: ${self:provider.stage}
       PRODUCTS_TABLE_NAME:
         Ref: ProductsTable
     events:
       - http:
-          path: /create-product
+          path: /create-products
           method: post
-          private: ${self:custom.apiKeyOnlyAccess.${self:provider.stage}}
+          integration: lambda
+          private: true
           cors:
             origin: "*"
             headers:
@@ -115,26 +117,102 @@ functions:
               - X-Amz-Security-Token
               - X-Amz-User-Agent
           request:
+            passThrough: NEVER
             schemas:
-              application/json:
-                schema: ${file(schemas/create_product_schema.json)}
-                name: PostCreateProduct
-                description: Validation model for Creating Products
+              application/json: ${file(schemas/create_products.json)}
+            template:
+              application/json: ${file(templates/create_products/request.vtl)}
+          response:
+            template: ${file(templates/create_products/response.vtl)}
+            statusCodes:
+              201:
+                pattern: '' # Default status code
 
+  getProducts:
+    name: ${self:provider.stage}-${self:service}-GetProducts
+    description: Responsible for retrieving products
+    runtime: python3.9
+    timeout: 10
+    package:
+      include:
+        - ../common/exceptions.py
+        - ../common/api.py
+        - ../common/utilities.py
+        - ../common/decorators.py
+        - ../common/enums.py
+        - ../common/aws/dynamo_database.py
+        - ../common/models/product.py
+        - ../common/transform.py
+        - lib/products_table.py
+        - get_products.py
+    handler: get_products.handler
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+          - dynamodb:Scan
+          - dynamodb:GetItem
+        Resource:
+          Fn::GetAtt:
+            - ProductsTable
+            - Arn
+    environment:
+      PRODUCTS_TABLE_NAME:
+        Ref: ProductsTable
+    events:
+      - http:
+          path: /get-product
+          method: get
+          private: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+          request:
+            parameters:
+              querystrings:
+                id: true
+      - http:
+          path: /get-products
+          method: get
+          private: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+          request:
+            parameters:
+              querystrings:
+                brand: false
 
 resources:
   Resources:
     ProductsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Products
+        TableName: ${self:custom.tenant}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: Id
             AttributeType: S
+          - AttributeName: Brand
+            AttributeType: S
         KeySchema:
           - AttributeName: Id
             KeyType: HASH
+          # - AttributeName: 
+          #   KeyType: SORT
 
   # Outputs:
     # CreateUserLambdaArn:

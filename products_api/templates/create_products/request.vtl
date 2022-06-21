@@ -1,0 +1,22 @@
+#set($products = $input.path('$.products')) 
+
+{
+  "products": [
+    #foreach($product in $products) 
+      {
+        "name": "$product.name",
+        "type": "$product.type",
+        "unit": "$product.unit"
+        #if("$product.brand" != ""),
+         "brand": "$product.brand"
+        #end
+        #if("$product.description" != ""),
+         "description": "$product.description"
+        #end
+        #if("$product.tags" != ""),
+          "tags": $product.tags
+        #end
+      }#if($foreach.hasNext),#end
+    #end
+  ]
+}

@@ -1,0 +1,51 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "https://api.jomicu.com/products/schemas/getproductmodel.json",
+	"title": "GetProductModel",
+	"type": "object",
+	"additionalProperties": false,
+	"anyOf": [
+		{ "required": ["id"] },
+		{ "required": ["name"] },
+		{ "required": ["brand"] }
+	],
+	"properties": {
+		"id": {
+			"description": "Product id",
+			"type": "string",
+			"minLength": 1
+		},
+		"name": {
+			"description": "Product name",
+			"type": "string",
+			"minLength": 1
+		},
+		"brand": {
+			"description": "Product brand",
+			"type": "string",
+			"minLength": 1
+		},
+		"queryString": {
+			"title": "String representing the rest of the query params",
+			"type": "string"
+		}
+	},
+	"links": [
+		{
+			"rel": "self",
+			"method": "GET",
+			"href": "/products?id={id}"
+		},
+		{
+			"rel": "next",
+			"method": "GET",
+			"href": "/products?name={name}"
+		},
+		{
+			"title": "Get prev page",
+			"rel": "prev",
+			"method": "GET",
+			"href": "/products?brand={brand}"
+		}
+	]
+}
